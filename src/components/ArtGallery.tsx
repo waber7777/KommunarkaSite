@@ -80,10 +80,10 @@ export default function ArtGallery() {
         : artworks.filter(art => art.collection === activeCollection);
 
     return (
-        <section className="pt-16 pb-32 px-6 md:px-12 bg-background relative">
+        <section className="pt-2 pb-32 px-6 md:px-12 bg-background relative">
             <div className="max-w-7xl mx-auto space-y-16">
                 {/* Filter Navigation */}
-                <div className="flex flex-wrap gap-x-12 gap-y-6 border-b border-white/5 pb-6 sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-[100px] md:pt-[90px] -mt-[60px]">
+                <div className="flex flex-wrap gap-x-12 gap-y-6 border-b border-white/5 pb-6 sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-[48px] md:pt-[54px] -mt-[8px]">
                     {collections.map((col) => (
                         <button
                             key={col}
