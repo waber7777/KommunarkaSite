@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const navLinks = [
-    { name: "Артефакты", href: "/archive" },
+    { name: "Артефакты", href: "/#archive" },
     { name: "Выставки", href: "/exhibitions" },
     { name: "Студия", href: "/about" },
     { name: "Контакты", href: "/contacts" },

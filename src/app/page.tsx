@@ -93,7 +93,7 @@ export default function Home() {
       </section>
 
       {/* Gallery Section Header */}
-      <div className="px-6 md:px-12 pt-32">
+      <div id="archive" className="px-6 md:px-12 pt-32">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-[4vw] font-bold font-montserrat uppercase tracking-tighter mb-4">
             Artifacts <span className="text-secondary opacity-30">/ Артефакты</span>
