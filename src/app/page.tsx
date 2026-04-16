@@ -13,7 +13,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32">
         <div className="max-w-7xl mx-auto w-full">
-          <h1 className="text-[11.5vw] md:text-[7.5vw] lg:text-[6.5vw] font-bold font-montserrat uppercase leading-[0.85] tracking-tighter flex flex-col">
+          <h1 className="text-[9vw] min-[500px]:text-[11vw] md:text-[7.5vw] lg:text-[6.5vw] font-bold font-montserrat uppercase leading-[0.85] tracking-tighter flex flex-col">
             <span className="overflow-hidden">
               <motion.span
                 initial={{ y: "120%", opacity: 0 }}

@@ -46,7 +46,7 @@ export default function Navigation() {
                     </motion.div>
                 </Link>
 
-                <div className="flex flex-col items-end space-y-2 pointer-events-auto">
+                <div className="flex flex-row flex-wrap md:flex-col justify-end content-start md:content-end gap-x-4 gap-y-1 md:gap-x-0 md:space-y-2 max-w-[150px] md:max-w-none pointer-events-auto text-right">
                     {navLinks.map((link, i) => (
                         <Link
                             key={link.href}
