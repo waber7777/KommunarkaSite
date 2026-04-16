@@ -13,7 +13,7 @@ const navLinks = [
 export default function Navigation() {
     return (
         <nav className="fixed top-0 left-0 w-full z-50 mix-blend-difference px-6 pt-4 pb-2 md:px-12 md:pt-4 pointer-events-none">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-y-4 md:gap-y-0 w-full">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-y-4 md:gap-y-0 w-full hidden-scrollbar">
                 <Link href="/" className="group overflow-hidden pointer-events-auto shrink-0 mr-4">
                     <motion.div
                         initial={{ y: "100%" }}
@@ -46,12 +46,12 @@ export default function Navigation() {
                     </motion.div>
                 </Link>
 
-                <div className="flex overflow-x-auto w-full md:w-auto no-scrollbar justify-start md:justify-end items-center gap-x-6 md:gap-x-12 pointer-events-auto text-left md:text-right pb-1">
+                <div className="flex flex-row w-full md:w-auto justify-between md:justify-end items-center gap-x-2 md:gap-x-12 pointer-events-auto text-[10px] md:text-base pb-1">
                     {navLinks.map((link, i) => (
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="group relative overflow-hidden h-5 md:h-6 shrink-0"
+                            className="group relative overflow-hidden h-4 md:h-6 shrink-0 tracking-[0.1em] md:tracking-normal"
                         >
                             <motion.div
                                 initial={{ y: "100%" }}

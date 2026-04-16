@@ -83,12 +83,12 @@ export default function ArtGallery() {
         <section className="pt-2 pb-32 px-6 md:px-12 bg-background relative">
             <div className="max-w-7xl mx-auto space-y-16">
                 {/* Filter Navigation */}
-                <div className="flex overflow-x-auto md:flex-wrap no-scrollbar gap-x-8 md:gap-x-12 gap-y-6 border-b border-white/5 pb-2 md:pb-6 sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-[85px] md:pt-[44px] -mt-[8px]">
+                <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-x-12 md:gap-y-6 border-b border-white/5 pb-2 md:pb-6 sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-[85px] md:pt-[44px] -mt-[8px]">
                     {collections.map((col) => (
                         <button
                             key={col}
                             onClick={() => setActiveCollection(col)}
-                            className={`text-[8px] md:text-[10px] font-mono uppercase tracking-[0.3em] transition-colors relative py-2 shrink-0 ${activeCollection === col ? "text-accent" : "text-secondary hover:text-white"
+                            className={`text-[8px] md:text-[10px] font-mono uppercase tracking-[0.1em] md:tracking-[0.3em] transition-colors relative py-2 shrink-0 ${activeCollection === col ? "text-accent" : "text-secondary hover:text-white"
                                 }`}
                         >
                             {col}
