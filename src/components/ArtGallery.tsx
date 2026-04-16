@@ -83,7 +83,7 @@ export default function ArtGallery() {
         <section className="pt-2 pb-32 px-6 md:px-12 bg-background relative">
             <div className="max-w-7xl mx-auto space-y-16">
                 {/* Filter Navigation */}
-                <div className="flex flex-wrap gap-x-12 gap-y-6 border-b border-white/5 pb-2 md:pb-6 sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-[20px] md:pt-[22px] -mt-[8px]">
+                <div className="flex flex-wrap gap-x-12 gap-y-6 border-b border-white/5 pb-2 md:pb-6 sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-[10px] md:pt-[10px] -mt-[16px]">
                     {collections.map((col) => (
                         <button
                             key={col}
