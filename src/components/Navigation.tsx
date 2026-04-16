@@ -13,7 +13,7 @@ const navLinks = [
 export default function Navigation() {
     return (
         <nav className="fixed top-0 left-0 w-full z-50 mix-blend-difference px-6 py-8 md:px-12 pointer-events-none">
-            <div className="flex justify-between items-start">
+            <div className="flex flex-col md:flex-row justify-between items-start gap-y-4 md:gap-y-0">
                 <Link href="/" className="group overflow-hidden pointer-events-auto">
                     <motion.div
                         initial={{ y: "100%" }}
