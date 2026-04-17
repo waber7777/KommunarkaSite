@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import ArtGallery from "@/components/ArtGallery";
 import Counter from "@/components/Counter";
+import TypewriterText from "@/components/TypewriterText";
 
 export default function Home() {
   return (
@@ -58,6 +59,17 @@ export default function Home() {
               Легкость фарфора встречает тяжесть металла.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Typewriter Quote */}
+      <section className="py-32 md:py-48 px-6 md:px-12 flex items-center justify-center">
+        <div className="max-w-3xl mx-auto text-center">
+          <TypewriterText
+            text="Работая с глиной и мусором, мы играем, и наши персонажи пытаются построить храм на руинах."
+            className="text-2xl md:text-4xl font-light leading-relaxed text-primary/90 tracking-wide uppercase"
+            speed={60}
+          />
         </div>
       </section>
 
