@@ -88,7 +88,7 @@ export default function Home() {
             </ul>
             <div className="border-t border-white/5 pt-12">
               <TypewriterText
-                text="Работая с глиной и мусором, мы играем, и наши персонажи пытаются построить храм на руинах."
+                text="Работая с глиной и мусором, мы играем, и наши персонажи пытаются построить храм на руинах..."
                 className="text-base md:text-lg text-accent"
                 speed={50}
               />
