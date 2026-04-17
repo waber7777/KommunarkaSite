@@ -3,7 +3,7 @@ import React from "react";
 export default function RedButterfly({ className }: { className?: string }) {
   return (
     <img
-      src="/assets/solid-butterfly.png"
+      src="/assets/detailed-butterfly.png"
       alt="Kommunarka Butterfly"
       className={className}
     />
