@@ -62,17 +62,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Typewriter Quote */}
-      <section className="py-32 md:py-48 px-6 md:px-12 flex items-center justify-center">
-        <div className="max-w-3xl mx-auto text-center">
-          <TypewriterText
-            text="Работая с глиной и мусором, мы играем, и наши персонажи пытаются построить храм на руинах."
-            className="text-2xl md:text-4xl font-light leading-relaxed text-primary/90 tracking-wide uppercase"
-            speed={60}
-          />
-        </div>
-      </section>
-
       {/* Manifesto Section */}
       <section className="py-80 px-6 md:px-12 bg-white/[0.02] border-y border-white/5">
         <div className="max-w-4xl mx-auto space-y-16">
@@ -97,9 +86,13 @@ export default function Home() {
               <li className="hover:text-white transition-colors">беспечность и служение — хаотичное положение фрагментов и геометрия композиции</li>
               <li className="hover:text-white transition-colors">обучение и игра — концентрация и распад композиции</li>
             </ul>
-            <p className="text-base md:text-lg text-accent border-t border-white/5 pt-12">
-              Работая с глиной и мусором, мы играем, и наши персонажи пытаются построить храм на руинах.
-            </p>
+            <div className="border-t border-white/5 pt-12">
+              <TypewriterText
+                text="Работая с глиной и мусором, мы играем, и наши персонажи пытаются построить храм на руинах."
+                className="text-base md:text-lg text-accent"
+                speed={50}
+              />
+            </div>
           </div>
         </div>
       </section>
