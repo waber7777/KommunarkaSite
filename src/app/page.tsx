@@ -53,7 +53,7 @@ export default function Home() {
             className="mt-12 md:mt-16 max-w-2xl"
           >
             <p className="text-secondary text-sm md:text-base leading-relaxed uppercase font-light tracking-[0.15em] border-l-2 border-accent/50 pl-6">
-              Московская арт-студия Лары Метревели и Облепихи. <br className="hidden md:block" />
+              Московская творческая мастерская Лары Метревели и Облепихи. <br className="hidden md:block" />
               Трансформация индустриального мусора в высокое искусство. <br className="hidden md:block" />
               Легкость фарфора встречает тяжесть металла.
             </p>
