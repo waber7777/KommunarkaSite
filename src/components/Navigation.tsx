@@ -38,7 +38,7 @@ export default function Navigation() {
                                 OMMUNARKA
                             </span>
                             <span className="flex justify-between w-full text-[6px] md:text-[10px] font-mono text-accent transition-colors duration-500 mt-1">
-                                {"Art Studio / Moscow".toUpperCase().split("").map((char, index) => (
+                                {"Studio / Moscow".toUpperCase().split("").map((char, index) => (
                                     <span key={index}>{char === " " ? "\u00A0" : char}</span>
                                 ))}
                             </span>
