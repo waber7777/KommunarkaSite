@@ -136,7 +136,16 @@ export default function Home() {
             </div>
             <div className="space-y-4">
               <span className="text-white block">Social</span>
-              <p>Instagram: @kommunarkazames</p>
+              <p>
+                <a
+                  href="https://www.instagram.com/kommunarkazames/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-accent font-bold transition-colors"
+                >
+                  Instagram: @kommunarkazames
+                </a>
+              </p>
               <p>Telegram</p>
             </div>
             <div className="space-y-4">

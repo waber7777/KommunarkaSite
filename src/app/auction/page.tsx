@@ -819,6 +819,19 @@ export default function AuctionPage() {
               <p><a href="/#archive">Артефакты</a></p>
             </div>
             <div className="space-y-4">
+              <span className="text-white block">Social</span>
+              <p>
+                <a
+                  href="https://www.instagram.com/kommunarkazames/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-accent font-bold hover:underline"
+                >
+                  Instagram @kommunarkazames ↗
+                </a>
+              </p>
+            </div>
+            <div className="space-y-4">
               <span className="text-white block">Analytics</span>
               <Counter />
             </div>
