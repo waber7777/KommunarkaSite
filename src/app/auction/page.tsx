@@ -814,18 +814,20 @@ export default function AuctionPage() {
 
             {/* Artwork Details & Instagram Link */}
             <div className="space-y-6">
-              <div className="space-y-3 border-b border-white/10 pb-4">
-                <div className="inline-flex items-center gap-2 bg-accent text-black font-mono font-bold text-[10px] uppercase px-3 py-1 tracking-widest">
-                  LOT #01 • 1-OF-1 PHYGITAL
-                </div>
-                <div>
-                  <span className="text-xs font-mono text-secondary uppercase tracking-widest block">
+              <div className="space-y-4 border-b border-white/10 pb-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="text-[10px] font-mono text-secondary uppercase tracking-[0.25em]">
                     {lang === "ru" ? "Первый Арт-Лот" : "Featured Auction Item"}
                   </span>
-                  <h3 className="text-2xl md:text-3xl font-bold font-montserrat uppercase text-white mt-1">
+                  <span className="px-3 py-1 bg-accent/10 border border-accent/40 text-accent font-mono font-bold text-[10px] uppercase tracking-widest">
+                    LOT #01 • 1-OF-1 PHYGITAL
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-4xl font-bold font-montserrat uppercase text-white tracking-tight">
                     {lang === "ru" ? "Заборы. Лист №1" : "Fences. Sheet No. 1"}
                   </h3>
-                  <span className="text-xs font-mono text-accent block mt-1">2026 • Moscow Studio</span>
+                  <span className="text-xs font-mono text-accent block mt-1.5">2026 • Moscow Studio</span>
                 </div>
               </div>
 
