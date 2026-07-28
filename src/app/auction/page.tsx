@@ -647,6 +647,7 @@ export default function AuctionPage() {
               <p><a href="/#archive">Артефакты</a></p>
               <p><a href="/exhibitions">Выставки</a></p>
               <p><a href="/about">Студия</a></p>
+              <p><a href="/KOMMUNARKA_STRATEGY.md" target="_blank" rel="noreferrer" className="text-accent font-bold">Белая Книга (MD)</a></p>
             </div>
             <div className="space-y-4">
               <span className="text-white block">Analytics</span>
