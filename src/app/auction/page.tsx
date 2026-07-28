@@ -7,13 +7,28 @@ import TypewriterText from "@/components/TypewriterText";
 import Counter from "@/components/Counter";
 
 export default function AuctionPage() {
-  const [auctionBid, setAuctionBid] = useState<number>(25000); // USD value of auction
+  // Calculator mode: 'burn-bidding' or 'botto-buyback'
+  const [calcMode, setCalcMode] = useState<"burn-bidding" | "botto-buyback">("burn-bidding");
+  const [auctionBid, setAuctionBid] = useState<number>(25000);
+  const [auctionsCount, setAuctionsCount] = useState<number>(12); // auctions per year
+  const [holdersCount, setHoldersCount] = useState<number>(5000);
 
-  const burnRate = 0.75;
-  const artistRate = 0.25;
-  const burnedUSD = auctionBid * burnRate;
-  const artistUSD = auctionBid * artistRate;
-  const tokensEstimate = (burnedUSD * 1250).toLocaleString(); // Estimated token count
+  // Calculations for Burn Bidding
+  const burnBiddingRate = 0.75;
+  const artistBiddingRate = 0.25;
+  const burnedBiddingUSD = auctionBid * burnBiddingRate;
+  const artistBiddingUSD = auctionBid * artistBiddingRate;
+
+  // Calculations for Botto Buyback
+  const bottoBuybackRate = 0.5;
+  const bottoRewardsRate = 0.5;
+  const bottoBuybackUSD = auctionBid * bottoBuybackRate;
+  const bottoRewardsUSD = auctionBid * bottoRewardsRate;
+
+  // Projections calculations
+  const totalAnnualVolume = auctionBid * auctionsCount;
+  const totalAnnualBurnUSD = totalAnnualVolume * (calcMode === "burn-bidding" ? 0.75 : 0.5);
+  const projectedMarketCap = Math.round(totalAnnualBurnUSD * 2.8 + holdersCount * 150);
 
   return (
     <main className="flex-grow flex flex-col bg-black text-white selection:bg-accent selection:text-black">
@@ -21,14 +36,14 @@ export default function AuctionPage() {
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
-        {/* Decorative Glow Background */}
+        {/* Ambient Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent/10 rounded-full blur-[160px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md mb-8">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+          <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/10 bg-white/[0.03] backdrop-blur-md mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             <span className="text-[10px] md:text-xs font-mono tracking-[0.25em] text-secondary uppercase">
-              Phygital Protocol • Solana Blockchain • Burn Tokenomics
+              Phygital Protocol • Solana Blockchain • Deflationary Mechanics
             </span>
           </div>
 
@@ -62,8 +77,8 @@ export default function AuctionPage() {
             className="mt-8 max-w-2xl"
           >
             <p className="text-secondary text-sm md:text-lg leading-relaxed uppercase font-light tracking-[0.1em] border-l-2 border-accent/50 pl-6">
-              Московская мастерская «Коммунарка» представляет первое поколение Phygital-аукционов. <br className="hidden md:block" />
-              Трансформация фарфора и метала в высокую токеномику: каждая победная ставка сжигает токены на рынке.
+              Московская мастерская «Коммунарка» представляет Phygital-протокол. <br className="hidden md:block" />
+              Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка сокращает эмиссию токена на рынке.
             </p>
           </motion.div>
 
@@ -83,13 +98,13 @@ export default function AuctionPage() {
               href="#burn-simulator"
               className="px-8 py-4 border border-white/20 text-white font-mono uppercase tracking-[0.15em] text-xs hover:border-accent hover:text-accent transition-colors bg-white/[0.02]"
             >
-              Симулятор Сжигания
+              Симулятор Токеномики
             </a>
           </motion.div>
         </div>
       </section>
 
-      {/* Manifesto / Architecture Section */}
+      {/* Architecture Section */}
       <section className="py-32 px-6 md:px-12 bg-white/[0.02] border-y border-white/5">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-4">
@@ -103,23 +118,23 @@ export default function AuctionPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 border border-white/10 space-y-6 hover:border-accent/50 transition-colors bg-black/40">
-              <span className="text-2xl font-mono text-accent">01.</span>
+              <span className="text-xs font-mono text-accent uppercase tracking-widest block">[01] АКТИВ</span>
               <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Физический Артефакт</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
-                Художники мастерской создают утончённые объекты из индустриального фарфора, бетона и металла. Каждый предмет оснащается NFC-чипом подлинности и 1-of-1 NFT паспортом.
+                Художники мастерской создают утончённые объекты из фарфора, бетона и металла. Каждый предмет оснащается NFC-микрочипом подлинности и 1-of-1 NFT паспортом.
               </p>
             </div>
 
             <div className="p-8 border border-white/10 space-y-6 hover:border-accent/50 transition-colors bg-black/40">
-              <span className="text-2xl font-mono text-accent">02.</span>
+              <span className="text-xs font-mono text-accent uppercase tracking-widest block">[02] ДЕФЛЯЦИЯ</span>
               <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Burn Auction Engine</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
-                Торги проходят на смарт-контрактах Solana. 75% от победной ставки насовсем сжигаются в прямом эфире, создавая постоянный дефицит предложения токена на рынке.
+                Торги проходят на смарт-контрактах Solana. 75% от победной ставки насовсем сжигаются, создавая постоянный дефицит предложения токена на рынке.
               </p>
             </div>
 
             <div className="p-8 border border-white/10 space-y-6 hover:border-accent/50 transition-colors bg-black/40">
-              <span className="text-2xl font-mono text-accent">03.</span>
+              <span className="text-xs font-mono text-accent uppercase tracking-widest block">[03] ДОХОДНОСТЬ</span>
               <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Vault & Exhibition Yield</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
                 Картины выставляются в реальных арт-галереях. Держатели токенов и NFT участвуют в доходах от выставочных билетов, мерча и коммерческих лицензий.
@@ -129,26 +144,50 @@ export default function AuctionPage() {
         </div>
       </section>
 
-      {/* Burn Simulator Section */}
+      {/* Interactive Simulator Section */}
       <section id="burn-simulator" className="py-32 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto space-y-16">
+        <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4 text-center">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              02 / Simulator / Симулятор
+              02 / Simulator / Симулятор Токеномики
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Калькулятор Сжигания $KOMMUNARKA
+              Калькулятор & Модель Сжигания
             </h2>
             <p className="text-secondary text-sm md:text-base max-w-xl mx-auto font-light">
-              Посчитайте, какой объем токенов уничтожается при проведении физического арт-аукциона.
+              Выберите модель распределения доходов и оцените влияние на предложение токенов и капитализацию.
             </p>
           </div>
 
+          {/* Mode Switcher Tabs */}
+          <div className="flex justify-center border-b border-white/10">
+            <button
+              onClick={() => setCalcMode("burn-bidding")}
+              className={`px-8 py-4 font-mono text-xs uppercase tracking-[0.15em] border-b-2 transition-all ${
+                calcMode === "burn-bidding"
+                  ? "border-accent text-accent bg-white/[0.02]"
+                  : "border-transparent text-secondary hover:text-white"
+              }`}
+            >
+              Модель 1: Burn Bidding (75% Burn)
+            </button>
+            <button
+              onClick={() => setCalcMode("botto-buyback")}
+              className={`px-8 py-4 font-mono text-xs uppercase tracking-[0.15em] border-b-2 transition-all ${
+                calcMode === "botto-buyback"
+                  ? "border-accent text-accent bg-white/[0.02]"
+                  : "border-transparent text-secondary hover:text-white"
+              }`}
+            >
+              Модель 2: Botto-Style Buyback (50% Buyback)
+            </button>
+          </div>
+
           <div className="p-8 md:p-14 border border-white/10 bg-white/[0.01] space-y-12">
-            {/* Slider */}
-            <div className="space-y-6">
+            {/* Slider 1: Auction Bid */}
+            <div className="space-y-4">
               <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
-                <span className="text-secondary">Победная ставка на аукционе:</span>
+                <span className="text-secondary">Средняя ставка на аукционе:</span>
                 <span className="text-accent font-bold text-2xl">${auctionBid.toLocaleString()} USD</span>
               </div>
               <input
@@ -167,49 +206,193 @@ export default function AuctionPage() {
               </div>
             </div>
 
-            {/* Metric Boxes */}
+            {/* Slider 2: Auctions Per Year */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
+                <span className="text-secondary">Количество аукционов в год:</span>
+                <span className="text-accent font-bold text-xl">{auctionsCount} аукционов</span>
+              </div>
+              <input
+                type="range"
+                min="2"
+                max="52"
+                step="1"
+                value={auctionsCount}
+                onChange={(e) => setAuctionsCount(Number(e.target.value))}
+                className="w-full h-2 bg-white/10 appearance-none cursor-pointer accent-accent"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
+                <span>2 (Раз в полгода)</span>
+                <span>12 (Ежемесячно)</span>
+                <span>52 (Еженедельно)</span>
+              </div>
+            </div>
+
+            {/* Metric Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-white/10">
               <div className="p-6 border border-accent/30 bg-accent/5 space-y-3">
                 <span className="text-[10px] font-mono text-accent uppercase tracking-widest block">
-                  Насовсем сжигается (75%):
+                  {calcMode === "burn-bidding" ? "Сжигание с 1 аукциона (75%):" : "Выкуп и сжигание (50%):"}
                 </span>
                 <div className="text-3xl font-bold text-white font-montserrat">
-                  ${burnedUSD.toLocaleString()}
+                  ${(calcMode === "burn-bidding" ? burnedBiddingUSD : bottoBuybackUSD).toLocaleString()}
                 </div>
-                <div className="text-[10px] font-mono text-secondary">~{tokensEstimate} $KOMMUNARKA</div>
+                <div className="text-[10px] font-mono text-secondary">
+                  Годовое сжигание: ${totalAnnualBurnUSD.toLocaleString()} USD
+                </div>
               </div>
 
               <div className="p-6 border border-white/10 bg-black/40 space-y-3">
                 <span className="text-[10px] font-mono text-secondary uppercase tracking-widest block">
-                  Доход Автора (25%):
+                  {calcMode === "burn-bidding" ? "Выплата Автору (25%):" : "Награды Сообществу (50%):"}
                 </span>
                 <div className="text-3xl font-bold text-accent font-montserrat">
-                  ${artistUSD.toLocaleString()}
+                  ${(calcMode === "burn-bidding" ? artistBiddingUSD : bottoRewardsUSD).toLocaleString()}
                 </div>
-                <div className="text-[10px] font-mono text-secondary">Прямое вознаграждение художнику</div>
+                <div className="text-[10px] font-mono text-secondary">Прямое вознаграждение участникам</div>
               </div>
 
               <div className="p-6 border border-white/10 bg-black/40 space-y-3">
                 <span className="text-[10px] font-mono text-secondary uppercase tracking-widest block">
-                  Эффект на рынок:
+                  Годовой объем продаж:
                 </span>
-                <div className="text-xl font-bold text-white font-montserrat uppercase">
-                  Дефицит Supply 🚀
+                <div className="text-3xl font-bold text-white font-montserrat">
+                  ${totalAnnualVolume.toLocaleString()}
                 </div>
-                <div className="text-[10px] font-mono text-secondary">Увеличение ценности токена на DEX</div>
+                <div className="text-[10px] font-mono text-secondary">Общий объем арт-аукционов за год</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Artist Section & Botto DAO Case */}
+      {/* Visual Analytics & Projection Charts Section */}
       <section className="py-32 px-6 md:px-12 bg-white/[0.02] border-y border-white/5">
+        <div className="max-w-6xl mx-auto space-y-16">
+          <div className="space-y-4">
+            <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
+              03 / Analytics / Прогноз Капитализации & Холдеров
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
+              Графики Зависимости & Дефляционная Кривая
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Chart 1: Market Cap Projection */}
+            <div className="p-8 border border-white/10 bg-black space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
+                  Прогноз Капитализации ($)
+                </h3>
+                <span className="text-[10px] font-mono text-secondary uppercase">
+                  При {auctionsCount} аукционах/год
+                </span>
+              </div>
+              <p className="text-secondary text-xs font-light">
+                Модель роста капитализации при сокращении предложения токенов и проведении регулярных торгов.
+              </p>
+
+              {/* Styled SVG Chart */}
+              <div className="h-64 w-full pt-4">
+                <svg viewBox="0 0 500 200" className="w-full h-full">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ffb703" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#ffb703" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Grid Lines */}
+                  <line x1="0" y1="40" x2="500" y2="40" stroke="#ffffff10" strokeDasharray="4" />
+                  <line x1="0" y1="90" x2="500" y2="90" stroke="#ffffff10" strokeDasharray="4" />
+                  <line x1="0" y1="140" x2="500" y2="140" stroke="#ffffff10" strokeDasharray="4" />
+
+                  {/* Area fill */}
+                  <path
+                    d="M 0 170 Q 120 150 250 90 T 500 30 L 500 190 L 0 190 Z"
+                    fill="url(#chartGrad)"
+                  />
+
+                  {/* Line curve */}
+                  <path
+                    d="M 0 170 Q 120 150 250 90 T 500 30"
+                    fill="none"
+                    stroke="#ffb703"
+                    strokeWidth="3"
+                  />
+
+                  {/* Data Points */}
+                  <circle cx="0" cy="170" r="4" fill="#ffb703" />
+                  <circle cx="250" cy="90" r="4" fill="#ffb703" />
+                  <circle cx="500" cy="30" r="5" fill="#ffffff" stroke="#ffb703" strokeWidth="2" />
+                </svg>
+              </div>
+
+              <div className="flex justify-between text-[10px] font-mono text-secondary uppercase pt-2 border-t border-white/5">
+                <span>Старт: $100K</span>
+                <span>6 месяцев: ${(projectedMarketCap * 0.45).toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                <span className="text-accent font-bold">12 месяцев: ${projectedMarketCap.toLocaleString()}</span>
+              </div>
+            </div>
+
+            {/* Chart 2: Deflation Curve vs Holders */}
+            <div className="p-8 border border-white/10 bg-black space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
+                  Дефляция Эмиссии (%)
+                </h3>
+                <span className="text-[10px] font-mono text-secondary uppercase">
+                  Сокращение Supply
+                </span>
+              </div>
+              <p className="text-secondary text-xs font-light">
+                Динамика сожжения токенов (оранжевая линия) в зависимости от роста держателей (белая линия).
+              </p>
+
+              {/* Styled SVG Chart 2 */}
+              <div className="h-64 w-full pt-4">
+                <svg viewBox="0 0 500 200" className="w-full h-full">
+                  {/* Grid Lines */}
+                  <line x1="0" y1="50" x2="500" y2="50" stroke="#ffffff10" strokeDasharray="4" />
+                  <line x1="0" y1="100" x2="500" y2="100" stroke="#ffffff10" strokeDasharray="4" />
+                  <line x1="0" y1="150" x2="500" y2="150" stroke="#ffffff10" strokeDasharray="4" />
+
+                  {/* Supply Reduction Curve (Decreasing) */}
+                  <path
+                    d="M 0 30 Q 150 40 300 110 T 500 170"
+                    fill="none"
+                    stroke="#ffb703"
+                    strokeWidth="3"
+                  />
+
+                  {/* Holders Growth Curve (Increasing) */}
+                  <path
+                    d="M 0 180 Q 180 150 320 80 T 500 20"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                    strokeDasharray="6 3"
+                  />
+                </svg>
+              </div>
+
+              <div className="flex justify-between text-[10px] font-mono text-secondary uppercase pt-2 border-t border-white/5">
+                <span className="text-accent">● Эмиссия токенов (Сокращение)</span>
+                <span className="text-white">-- Рост Держателей (Holders)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Artist Gateway Section */}
+      <section className="py-32 px-6 md:px-12 bg-black">
         <div className="max-w-7xl mx-auto space-y-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="space-y-8">
               <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-                03 / Artist Gateway / Для Художников
+                04 / Artist Gateway / Для Художников
               </span>
               <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter leading-tight">
                 Почему это выгодно авторам?
@@ -226,7 +409,7 @@ export default function AuctionPage() {
               </div>
             </div>
 
-            <div className="p-10 border border-white/10 bg-black space-y-8">
+            <div className="p-10 border border-white/10 bg-white/[0.01] space-y-8">
               <div className="space-y-2">
                 <span className="text-[10px] font-mono text-accent uppercase tracking-widest block">
                   Proof of Concept / Доказанный Кейс
@@ -262,12 +445,12 @@ export default function AuctionPage() {
         </div>
       </section>
 
-      {/* Logistics & Vault Info */}
-      <section className="py-32 px-6 md:px-12 border-b border-white/5">
+      {/* Logistics & Security */}
+      <section className="py-32 px-6 md:px-12 border-t border-white/5 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              04 / Logistics & Security / Логистика
+              05 / Logistics & Security / Логистика
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
               Доставка по миру и Vault-Хранение
@@ -275,18 +458,18 @@ export default function AuctionPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="p-8 border border-white/10 space-y-4 bg-white/[0.01]">
+            <div className="p-8 border border-white/10 space-y-4 bg-black">
               <h3 className="text-lg font-bold font-montserrat uppercase tracking-tight text-accent">
-                📦 Отправка физических картин из РФ
+                [А] Отправка физических картин из РФ
               </h3>
               <p className="text-secondary text-sm font-light leading-relaxed">
                 Работы современных авторов (до 50 лет) оформляются экспертом Минкульта РФ за 2-3 дня. Доставка осуществляется компаниями EMS, СДЭК Арт и Art Mail в жестких климатических боксах в 180+ стран мира с полным страхованием.
               </p>
             </div>
 
-            <div className="p-8 border border-white/10 space-y-4 bg-white/[0.01]">
+            <div className="p-8 border border-white/10 space-y-4 bg-black">
               <h3 className="text-lg font-bold font-montserrat uppercase tracking-tight text-accent">
-                🏛️ Vault & Claim (Депозитарная Гарантия)
+                [Б] Vault & Claim (Депозитарная Гарантия)
               </h3>
               <p className="text-secondary text-sm font-light leading-relaxed">
                 Чтобы не пересылать картину при каждой перепродаже NFT, произведение хранится в безопасном хранилище проекта. Инвестор может свободно торговать NFT 24/7 или в любой момент заказать доставку через кнопку Redeem Physical.
@@ -297,8 +480,8 @@ export default function AuctionPage() {
       </section>
 
       {/* First Auction Teaser */}
-      <section id="first-auction" className="py-32 px-6 md:px-12 bg-white/[0.02]">
-        <div className="max-w-4xl mx-auto text-center space-y-8 border border-accent/40 p-12 md:p-20 bg-black">
+      <section id="first-auction" className="py-32 px-6 md:px-12 bg-black">
+        <div className="max-w-4xl mx-auto text-center space-y-8 border border-accent/40 p-12 md:p-20 bg-white/[0.01]">
           <span className="text-[10px] font-mono tracking-[0.5em] text-accent uppercase block">
             Upcoming Auction #01
           </span>
