@@ -49,6 +49,7 @@ const artworks: Artwork[] = [
     { id: "com", title: "Комьюнити", materials: "Бумага, тушь", dimensions: "87 х 42", year: "2025", collection: "Живопись / Графика", image: "page_30" },
 
     // УЛИЧНЫЕ ОБЪЕКТЫ
+    { id: "zabor-1", title: "Заборы. Лист №1", materials: "Профлист, сварка, дерево, тушь, художественное ржавление", dimensions: "200 х 120 см", year: "2026", collection: "Уличные объекты", image: "page_32" },
     { id: "sv", title: "Светильник", materials: "Металл, бетон, реди-мейд", dimensions: "400 х 350 х 1860", year: "2025", collection: "Уличные объекты", image: "page_32" },
     { id: "pom", title: "Помощник. Макет и Станция", materials: "Картон, пластик, металл", dimensions: "Различные", year: "2025", collection: "Уличные объекты", image: "page_34" },
     { id: "inst", title: "Абсолютный танец. Визуализация", materials: "Инсталляция", dimensions: "Масштабная", year: "2026", collection: "Уличные объекты", image: "page_35" }

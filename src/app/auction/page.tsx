@@ -760,29 +760,81 @@ export default function AuctionPage() {
       </section>
 
       {/* First Auction Teaser */}
-      <section id="first-auction" className="py-32 px-6 md:px-12 bg-black">
-        <div className="max-w-4xl mx-auto text-center space-y-8 border border-accent/40 p-12 md:p-20 bg-white/[0.01]">
-          <span className="text-[10px] font-mono tracking-[0.5em] text-accent uppercase block">
-            {t.teaserSub}
-          </span>
-          <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-            {t.teaserTitle}
-          </h2>
-          <TypewriterText
-            text={lang === "ru" ? "Индустриальный фарфор, металл и сжигание токенов на Solana..." : "Industrial porcelain, steel, and token burning on Solana..."}
-            className="text-base md:text-xl text-accent font-mono"
-            speed={40}
-          />
-          <p className="text-secondary text-sm max-w-lg mx-auto font-light">
-            {lang === "ru"
-              ? "Физическая арт-скульптура + 1-of-1 NFT Паспорт. Победная ставка сжигает монеты $KOMMUNARKA в прямом эфире."
-              : "Physical art sculpture + 1-of-1 NFT Passport. Winning bids burn $KOMMUNARKA tokens live on-chain."}
-          </p>
+      <section id="first-auction" className="py-32 px-6 md:px-12 bg-black border-t border-white/5">
+        <div className="max-w-5xl mx-auto space-y-12">
+          <div className="text-center space-y-4">
+            <span className="text-[10px] font-mono tracking-[0.5em] text-accent uppercase block">
+              {t.teaserSub}
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
+              {t.teaserTitle}
+            </h2>
+            <TypewriterText
+              text={lang === "ru" ? "Лот №01: Индустриальный арт-объект «Заборы. Лист №1»" : "Lot #01: Industrial Artwork «Fences. Sheet No. 1»"}
+              className="text-base md:text-xl text-accent font-mono"
+              speed={40}
+            />
+          </div>
 
-          <div className="pt-6 flex justify-center">
-            <button className="px-10 py-5 bg-accent text-black font-bold uppercase tracking-[0.2em] font-mono text-xs hover:bg-white transition-colors">
-              {t.teaserBtn}
-            </button>
+          {/* Featured Lot Card */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border border-accent/40 bg-white/[0.01] p-8 md:p-12 items-center">
+            {/* Artwork Image Container */}
+            <div className="relative group overflow-hidden border border-white/10 aspect-[3/4] bg-zinc-950 flex items-center justify-center p-4">
+              <img
+                src="/assets/artworks/page_32.png?v=3"
+                alt="Заборы. Лист №1"
+                className="w-full h-full object-contain filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+              <div className="absolute top-4 left-4 bg-accent text-black font-mono font-bold text-[10px] uppercase px-3 py-1 tracking-widest">
+                LOT #01 • 1-OF-1 PHYGITAL
+              </div>
+            </div>
+
+            {/* Artwork Details & Instagram Link */}
+            <div className="space-y-6">
+              <div className="space-y-2 border-b border-white/10 pb-4">
+                <span className="text-xs font-mono text-secondary uppercase tracking-widest">
+                  {lang === "ru" ? "Первый Арт-Лот" : "Featured Auction Item"}
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold font-montserrat uppercase text-white">
+                  {lang === "ru" ? "Заборы. Лист №1" : "Fences. Sheet No. 1"}
+                </h3>
+                <span className="text-xs font-mono text-accent block">2026 • Moscow Studio</span>
+              </div>
+
+              <div className="space-y-3 text-xs font-mono text-secondary">
+                <p>
+                  <span className="text-white font-bold">{lang === "ru" ? "Материалы:" : "Materials:"}</span>{" "}
+                  {lang === "ru"
+                    ? "Профлист, сварка, дерево, тушь, художественное ржавление."
+                    : "Corrugated steel sheet, welding, wood, Indian ink, artistic rust patina."}
+                </p>
+                <p>
+                  <span className="text-white font-bold">{lang === "ru" ? "Размеры:" : "Dimensions:"}</span> 200 × 120 см
+                </p>
+                <p>
+                  <span className="text-white font-bold">{lang === "ru" ? "Сопровождение:" : "Provenance:"}</span>{" "}
+                  {lang === "ru"
+                    ? "Физический объект + NFC-чип + 1-of-1 NFT Паспорт Solana."
+                    : "Physical artwork + NFC authentication + 1-of-1 Solana NFT Passport."}
+                </p>
+              </div>
+
+              <div className="pt-4 flex flex-col gap-4">
+                <a
+                  href="https://www.instagram.com/p/Dau3m_RCI-T/?img_index=1"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full py-4 border border-accent text-accent font-bold font-mono text-center text-xs uppercase tracking-widest hover:bg-accent hover:text-black transition-colors"
+                >
+                  {lang === "ru" ? "Посмотреть в Instagram (@kommunarkazames) ↗" : "View on Instagram (@kommunarkazames) ↗"}
+                </a>
+
+                <button className="w-full py-4 bg-accent text-black font-bold uppercase tracking-[0.2em] font-mono text-xs hover:bg-white transition-colors">
+                  {t.teaserBtn}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
