@@ -9,26 +9,34 @@ import Counter from "@/components/Counter";
 export default function AuctionPage() {
   // Calculator mode: 'burn-bidding' or 'botto-buyback'
   const [calcMode, setCalcMode] = useState<"burn-bidding" | "botto-buyback">("burn-bidding");
-  const [auctionBid, setAuctionBid] = useState<number>(25000);
-  const [auctionsCount, setAuctionsCount] = useState<number>(12); // auctions per year
-  const [holdersCount, setHoldersCount] = useState<number>(5000);
+  
+  // Interactive Sliders
+  const [marketCap, setMarketCap] = useState<number>(1000000); // Token Market Cap in USD ($100k - $50M)
+  const [auctionBid, setAuctionBid] = useState<number>(25000); // Auction Bid in USD ($5k - $250k)
+  const [auctionsCount, setAuctionsCount] = useState<number>(12); // Auctions per year
 
-  // Calculations for Burn Bidding
-  const burnBiddingRate = 0.75;
-  const artistBiddingRate = 0.25;
-  const burnedBiddingUSD = auctionBid * burnBiddingRate;
-  const artistBiddingUSD = auctionBid * artistBiddingRate;
+  const TOTAL_SUPPLY = 1000000000; // 1,000,000,000 $KOMMUNARKA tokens
+  const tokenPrice = marketCap / TOTAL_SUPPLY;
 
-  // Calculations for Botto Buyback
-  const bottoBuybackRate = 0.5;
-  const bottoRewardsRate = 0.5;
-  const bottoBuybackUSD = auctionBid * bottoBuybackRate;
-  const bottoRewardsUSD = auctionBid * bottoRewardsRate;
+  // Total tokens in winning bid
+  const bidTokensTotal = auctionBid / tokenPrice;
 
-  // Projections calculations
-  const totalAnnualVolume = auctionBid * auctionsCount;
-  const totalAnnualBurnUSD = totalAnnualVolume * (calcMode === "burn-bidding" ? 0.75 : 0.5);
-  const projectedMarketCap = Math.round(totalAnnualBurnUSD * 2.8 + holdersCount * 150);
+  // Rates based on mode
+  const burnRate = calcMode === "burn-bidding" ? 0.75 : 0.50;
+  const artistRate = calcMode === "burn-bidding" ? 0.25 : 0.50;
+
+  // Burned & Artist Calculations
+  const burnedTokensCount = Math.round(bidTokensTotal * burnRate);
+  const burnedUSD = auctionBid * burnRate;
+  const burnedSupplyPercent = ((burnedTokensCount / TOTAL_SUPPLY) * 100).toFixed(2);
+
+  const artistTokensCount = Math.round(bidTokensTotal * artistRate);
+  const artistUSD = auctionBid * artistRate;
+
+  // Annual projections
+  const annualBurnedTokensCount = burnedTokensCount * auctionsCount;
+  const annualBurnedUSD = burnedUSD * auctionsCount;
+  const annualSupplyPercent = ((annualBurnedTokensCount / TOTAL_SUPPLY) * 100).toFixed(1);
 
   return (
     <main className="flex-grow flex flex-col bg-black text-white selection:bg-accent selection:text-black">
@@ -43,7 +51,7 @@ export default function AuctionPage() {
           <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/10 bg-white/[0.03] backdrop-blur-md mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             <span className="text-[10px] md:text-xs font-mono tracking-[0.25em] text-secondary uppercase">
-              Phygital Protocol • Solana Blockchain • Deflationary Mechanics
+              Phygital Protocol • Solana Mainnet • Token Burn Engine
             </span>
           </div>
 
@@ -78,7 +86,7 @@ export default function AuctionPage() {
           >
             <p className="text-secondary text-sm md:text-lg leading-relaxed uppercase font-light tracking-[0.1em] border-l-2 border-accent/50 pl-6">
               Московская мастерская «Коммунарка» представляет Phygital-протокол. <br className="hidden md:block" />
-              Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка сокращает эмиссию токена на рынке.
+              Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка уничтожает токены $KOMMUNARKA в штуках на рынке.
             </p>
           </motion.div>
 
@@ -129,7 +137,7 @@ export default function AuctionPage() {
               <span className="text-xs font-mono text-accent uppercase tracking-widest block">[02] ДЕФЛЯЦИЯ</span>
               <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Burn Auction Engine</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
-                Торги проходят на смарт-контрактах Solana. 75% от победной ставки насовсем сжигаются, создавая постоянный дефицит предложения токена на рынке.
+                Торги проходят на смарт-контрактах Solana. Победная ставка рассчитывается в токенах $KOMMUNARKA и сжигается, сокращая общую эмиссию монеты.
               </p>
             </div>
 
@@ -144,18 +152,18 @@ export default function AuctionPage() {
         </div>
       </section>
 
-      {/* Interactive Simulator Section */}
+      {/* Interactive Tokenomics Simulator */}
       <section id="burn-simulator" className="py-32 px-6 md:px-12">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4 text-center">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              02 / Simulator / Симулятор Токеномики
+              02 / Simulator / Симулятор Капитализации & Сжигания
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Калькулятор & Модель Сжигания
+              Калькулятор Сжигания Токенов $KOMMUNARKA
             </h2>
             <p className="text-secondary text-sm md:text-base max-w-xl mx-auto font-light">
-              Выберите модель распределения доходов и оцените влияние на предложение токенов и капитализацию.
+              Настройте текущую капитализацию монеты $KOMMUNARKA и размер ставки, чтобы рассчитать точное количество уничтожаемых токенов.
             </p>
           </div>
 
@@ -184,10 +192,36 @@ export default function AuctionPage() {
           </div>
 
           <div className="p-8 md:p-14 border border-white/10 bg-white/[0.01] space-y-12">
-            {/* Slider 1: Auction Bid */}
+            {/* Slider 1: Token Market Cap */}
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
-                <span className="text-secondary">Средняя ставка на аукционе:</span>
+                <span className="text-secondary">Капитализация монеты $KOMMUNARKA (Market Cap):</span>
+                <span className="text-accent font-bold text-2xl">${marketCap.toLocaleString()} USD</span>
+              </div>
+              <input
+                type="range"
+                min="100000"
+                max="50000000"
+                step="100000"
+                value={marketCap}
+                onChange={(e) => setMarketCap(Number(e.target.value))}
+                className="w-full h-2 bg-white/10 appearance-none cursor-pointer accent-accent"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
+                <span>$100,000</span>
+                <span>$1,000,000</span>
+                <span>$10,000,000</span>
+                <span>$50,000,000</span>
+              </div>
+              <div className="text-[10px] font-mono text-secondary">
+                Расчетная цена 1 токена: <span className="text-white">${tokenPrice.toFixed(6)} USD</span> (при Supply 1 млрд монеты)
+              </div>
+            </div>
+
+            {/* Slider 2: Auction Bid */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
+                <span className="text-secondary">Сумма победной ставки на аукционе:</span>
                 <span className="text-accent font-bold text-2xl">${auctionBid.toLocaleString()} USD</span>
               </div>
               <input
@@ -201,12 +235,12 @@ export default function AuctionPage() {
               />
               <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
                 <span>$5,000</span>
-                <span>$100,000</span>
+                <span>$50,000</span>
                 <span>$250,000</span>
               </div>
             </div>
 
-            {/* Slider 2: Auctions Per Year */}
+            {/* Slider 3: Auctions Count */}
             <div className="space-y-4 pt-4 border-t border-white/5">
               <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
                 <span className="text-secondary">Количество аукционов в год:</span>
@@ -228,50 +262,59 @@ export default function AuctionPage() {
               </div>
             </div>
 
-            {/* Metric Results Grid */}
+            {/* Dynamic Results Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-white/10">
-              <div className="p-6 border border-accent/30 bg-accent/5 space-y-3">
+              <div className="p-6 border border-accent/40 bg-accent/5 space-y-3">
                 <span className="text-[10px] font-mono text-accent uppercase tracking-widest block">
-                  {calcMode === "burn-bidding" ? "Сжигание с 1 аукциона (75%):" : "Выкуп и сжигание (50%):"}
+                  Сожжено токенов с 1 аукциона:
                 </span>
-                <div className="text-3xl font-bold text-white font-montserrat">
-                  ${(calcMode === "burn-bidding" ? burnedBiddingUSD : bottoBuybackUSD).toLocaleString()}
+                <div className="text-2xl font-bold text-white font-montserrat">
+                  {burnedTokensCount.toLocaleString()} <span className="text-sm font-mono text-accent">$KOMMUNARKA</span>
+                </div>
+                <div className="text-xs font-mono text-accent font-bold">
+                  Сокращение эмиссии: -{burnedSupplyPercent}% за 1 торги
                 </div>
                 <div className="text-[10px] font-mono text-secondary">
-                  Годовое сжигание: ${totalAnnualBurnUSD.toLocaleString()} USD
+                  Эквивалент: ${burnedUSD.toLocaleString()} USD
                 </div>
               </div>
 
               <div className="p-6 border border-white/10 bg-black/40 space-y-3">
                 <span className="text-[10px] font-mono text-secondary uppercase tracking-widest block">
-                  {calcMode === "burn-bidding" ? "Выплата Автору (25%):" : "Награды Сообществу (50%):"}
+                  Выплата Автору ({artistRate * 100}%):
                 </span>
-                <div className="text-3xl font-bold text-accent font-montserrat">
-                  ${(calcMode === "burn-bidding" ? artistBiddingUSD : bottoRewardsUSD).toLocaleString()}
+                <div className="text-2xl font-bold text-accent font-montserrat">
+                  {artistTokensCount.toLocaleString()} <span className="text-sm font-mono text-white">$KOMMUNARKA</span>
                 </div>
-                <div className="text-[10px] font-mono text-secondary">Прямое вознаграждение участникам</div>
+                <div className="text-xs font-mono text-white font-bold">
+                  Эквивалент: ${artistUSD.toLocaleString()} USD
+                </div>
+                <div className="text-[10px] font-mono text-secondary">Вознаграждение за созданный артефакт</div>
               </div>
 
               <div className="p-6 border border-white/10 bg-black/40 space-y-3">
                 <span className="text-[10px] font-mono text-secondary uppercase tracking-widest block">
-                  Годовой объем продаж:
+                  Годовой дефляционный эффект:
                 </span>
-                <div className="text-3xl font-bold text-white font-montserrat">
-                  ${totalAnnualVolume.toLocaleString()}
+                <div className="text-2xl font-bold text-white font-montserrat">
+                  {annualBurnedTokensCount.toLocaleString()} <span className="text-sm font-mono text-accent">$KOMMUNARKA</span>
                 </div>
-                <div className="text-[10px] font-mono text-secondary">Общий объем арт-аукционов за год</div>
+                <div className="text-xs font-mono text-accent font-bold">
+                  -{annualSupplyPercent}% от общей эмиссии за год!
+                </div>
+                <div className="text-[10px] font-mono text-secondary">Суммарное сжигание: ${annualBurnedUSD.toLocaleString()} USD</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Visual Analytics & Projection Charts Section */}
+      {/* Analytics & Projection Charts Section */}
       <section className="py-32 px-6 md:px-12 bg-white/[0.02] border-y border-white/5">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              03 / Analytics / Прогноз Капитализации & Холдеров
+              03 / Analytics / Динамика Капитализации & Эмиссии
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
               Графики Зависимости & Дефляционная Кривая
@@ -286,11 +329,11 @@ export default function AuctionPage() {
                   Прогноз Капитализации ($)
                 </h3>
                 <span className="text-[10px] font-mono text-secondary uppercase">
-                  При {auctionsCount} аукционах/год
+                  Текущая Cap: ${marketCap.toLocaleString()}
                 </span>
               </div>
               <p className="text-secondary text-xs font-light">
-                Модель роста капитализации при сокращении предложения токенов и проведении регулярных торгов.
+                Рост капитализации при ежедневном/ежемесячном сокращении токенов $KOMMUNARKA на аукционах.
               </p>
 
               {/* Styled SVG Chart */}
@@ -303,18 +346,14 @@ export default function AuctionPage() {
                     </linearGradient>
                   </defs>
 
-                  {/* Grid Lines */}
                   <line x1="0" y1="40" x2="500" y2="40" stroke="#ffffff10" strokeDasharray="4" />
                   <line x1="0" y1="90" x2="500" y2="90" stroke="#ffffff10" strokeDasharray="4" />
                   <line x1="0" y1="140" x2="500" y2="140" stroke="#ffffff10" strokeDasharray="4" />
 
-                  {/* Area fill */}
                   <path
                     d="M 0 170 Q 120 150 250 90 T 500 30 L 500 190 L 0 190 Z"
                     fill="url(#chartGrad)"
                   />
-
-                  {/* Line curve */}
                   <path
                     d="M 0 170 Q 120 150 250 90 T 500 30"
                     fill="none"
@@ -322,7 +361,6 @@ export default function AuctionPage() {
                     strokeWidth="3"
                   />
 
-                  {/* Data Points */}
                   <circle cx="0" cy="170" r="4" fill="#ffb703" />
                   <circle cx="250" cy="90" r="4" fill="#ffb703" />
                   <circle cx="500" cy="30" r="5" fill="#ffffff" stroke="#ffb703" strokeWidth="2" />
@@ -330,43 +368,39 @@ export default function AuctionPage() {
               </div>
 
               <div className="flex justify-between text-[10px] font-mono text-secondary uppercase pt-2 border-t border-white/5">
-                <span>Старт: $100K</span>
-                <span>6 месяцев: ${(projectedMarketCap * 0.45).toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                <span className="text-accent font-bold">12 месяцев: ${projectedMarketCap.toLocaleString()}</span>
+                <span>Текущая: ${marketCap.toLocaleString()}</span>
+                <span>Прогноз 6 мес: ${(marketCap * 2.2).toLocaleString()}</span>
+                <span className="text-accent font-bold">Прогноз 12 мес: ${(marketCap * 5.4).toLocaleString()}</span>
               </div>
             </div>
 
-            {/* Chart 2: Deflation Curve vs Holders */}
+            {/* Chart 2: Deflation Curve vs Token Price */}
             <div className="p-8 border border-white/10 bg-black space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
-                  Дефляция Эмиссии (%)
+                  Сокращение Эмиссии Монеты (%)
                 </h3>
                 <span className="text-[10px] font-mono text-secondary uppercase">
-                  Сокращение Supply
+                  Годовое сжигание: -{annualSupplyPercent}%
                 </span>
               </div>
               <p className="text-secondary text-xs font-light">
-                Динамика сожжения токенов (оранжевая линия) в зависимости от роста держателей (белая линия).
+                Кривая уменьшения штук токенов в обращении (оранжевая) и рост стоимости 1 монеты $KOMMUNARKA (белая).
               </p>
 
               {/* Styled SVG Chart 2 */}
               <div className="h-64 w-full pt-4">
                 <svg viewBox="0 0 500 200" className="w-full h-full">
-                  {/* Grid Lines */}
                   <line x1="0" y1="50" x2="500" y2="50" stroke="#ffffff10" strokeDasharray="4" />
                   <line x1="0" y1="100" x2="500" y2="100" stroke="#ffffff10" strokeDasharray="4" />
                   <line x1="0" y1="150" x2="500" y2="150" stroke="#ffffff10" strokeDasharray="4" />
 
-                  {/* Supply Reduction Curve (Decreasing) */}
                   <path
                     d="M 0 30 Q 150 40 300 110 T 500 170"
                     fill="none"
                     stroke="#ffb703"
                     strokeWidth="3"
                   />
-
-                  {/* Holders Growth Curve (Increasing) */}
                   <path
                     d="M 0 180 Q 180 150 320 80 T 500 20"
                     fill="none"
@@ -378,8 +412,8 @@ export default function AuctionPage() {
               </div>
 
               <div className="flex justify-between text-[10px] font-mono text-secondary uppercase pt-2 border-t border-white/5">
-                <span className="text-accent">● Эмиссия токенов (Сокращение)</span>
-                <span className="text-white">-- Рост Держателей (Holders)</span>
+                <span className="text-accent">● Эмиссия монеты $KOMMUNARKA (Сжигание)</span>
+                <span className="text-white">-- Рост цены 1 монеты ($)</span>
               </div>
             </div>
           </div>
@@ -494,7 +528,7 @@ export default function AuctionPage() {
             speed={40}
           />
           <p className="text-secondary text-sm max-w-lg mx-auto font-light">
-            Физическая арт-скульптура + 1-of-1 NFT Паспорт. 75% от победной ставки сжигается в прямом эфире.
+            Физическая арт-скульптура + 1-of-1 NFT Паспорт. Победная ставка сжигает монеты $KOMMUNARKA в прямом эфире.
           </p>
 
           <div className="pt-6">
