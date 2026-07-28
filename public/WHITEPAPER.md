@@ -1,5 +1,7 @@
 # 📜 KommunarkaCoin ($KOMMUNARKA) — Whitepaper & Strategy
 
+> 🌐 **Language / Язык:** **[ EN ] English (Whitepaper)** | [**[ RU ] Русский (KOMMUNARKA_STRATEGY.md)**](KOMMUNARKA_STRATEGY.md)
+
 ---
 
 ## 📋 Table of Contents

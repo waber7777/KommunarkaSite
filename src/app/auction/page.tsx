@@ -815,8 +815,7 @@ export default function AuctionPage() {
             </div>
             <div className="space-y-4">
               <span className="text-white block">Documentation</span>
-              <p><a href="/WHITEPAPER.md" target="_blank" rel="noreferrer" className="text-accent font-bold">Whitepaper (EN)</a></p>
-              <p><a href="/KOMMUNARKA_STRATEGY.md" target="_blank" rel="noreferrer" className="hover:text-white">Strategy (RU)</a></p>
+              <p><a href={lang === "en" ? "/WHITEPAPER.md" : "/KOMMUNARKA_STRATEGY.md"} target="_blank" rel="noreferrer" className="text-accent font-bold">Whitepaper</a></p>
               <p><a href="/#archive">Артефакты</a></p>
             </div>
             <div className="space-y-4">

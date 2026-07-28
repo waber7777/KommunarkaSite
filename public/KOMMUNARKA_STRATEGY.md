@@ -1,5 +1,7 @@
 # 📜 Полная Стратегия и Белая Книга Проекта KommunarkaCoin ($KOMMUNARKA)
 
+> 🌐 **Язык / Language:** **[ RU ] Русский (Стратегия)** | [**[ EN ] English (Whitepaper.md)**](WHITEPAPER.md)
+
 ---
 
 ## 📋 Оглавление
