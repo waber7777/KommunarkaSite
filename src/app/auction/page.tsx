@@ -226,9 +226,9 @@ export default function AuctionPage() {
               href={lang === "en" ? "/WHITEPAPER.md" : "/KOMMUNARKA_STRATEGY.md"}
               target="_blank"
               rel="noreferrer"
-              className="px-8 py-4 border border-accent/40 text-accent font-mono uppercase tracking-[0.15em] text-xs hover:bg-accent hover:text-black transition-colors"
+              className="px-8 py-4 border border-accent text-accent font-bold font-mono uppercase tracking-[0.15em] text-xs hover:bg-accent hover:text-black transition-colors"
             >
-              {lang === "en" ? "Read Whitepaper (EN)" : "Читать Стратегию (RU)"}
+              {lang === "en" ? "Whitepaper (Strategy)" : "Whitepaper (Стратегия)"}
             </a>
           </motion.div>
         </div>
