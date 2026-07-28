@@ -51,7 +51,7 @@ export default function AuctionPage() {
           <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/10 bg-white/[0.03] backdrop-blur-md mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             <span className="text-[10px] md:text-xs font-mono tracking-[0.25em] text-secondary uppercase">
-              Phygital Protocol • Solana Mainnet • Token Burn Engine
+              Phygital Protocol • Solana Mainnet • Dual Burn Engine
             </span>
           </div>
 
@@ -86,7 +86,7 @@ export default function AuctionPage() {
           >
             <p className="text-secondary text-sm md:text-lg leading-relaxed uppercase font-light tracking-[0.1em] border-l-2 border-accent/50 pl-6">
               Московская мастерская «Коммунарка» представляет Phygital-протокол. <br className="hidden md:block" />
-              Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка уничтожает токены $KOMMUNARKA в штуках на рынке.
+              Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка уничтожает токены $KOMMUNARKA на рынке.
             </p>
           </motion.div>
 
@@ -103,10 +103,10 @@ export default function AuctionPage() {
               Смотреть 1-й Аукцион
             </a>
             <a
-              href="#burn-simulator"
+              href="#step-by-step"
               className="px-8 py-4 border border-white/20 text-white font-mono uppercase tracking-[0.15em] text-xs hover:border-accent hover:text-accent transition-colors bg-white/[0.02]"
             >
-              Симулятор Токеномики
+              Сценарии 2-х Моделей
             </a>
           </motion.div>
         </div>
@@ -152,12 +152,89 @@ export default function AuctionPage() {
         </div>
       </section>
 
+      {/* Step-by-Step Execution Scenarios Section */}
+      <section id="step-by-step" className="py-32 px-6 md:px-12 bg-black border-b border-white/5">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="space-y-4 text-center">
+            <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
+              02 / Execution Scenarios / Шаг за Шагом
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
+              Пошаговый Сценарий Работы 2-х Моделей
+            </h2>
+            <p className="text-secondary text-sm md:text-base max-w-2xl mx-auto font-light">
+              Сравнение механики проведения торгов, расчетов с Художником и прав проигравших участников.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Model 1 Walkthrough */}
+            <div className="p-8 border border-accent/40 bg-white/[0.01] space-y-6">
+              <div className="flex justify-between items-center pb-4 border-b border-white/10">
+                <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
+                  Модель 1: Burn Bidding (Прямые ставки)
+                </h3>
+                <span className="text-[10px] font-mono text-secondary uppercase border border-accent/30 px-2 py-1">
+                  Ставки в $KOMMUNARKA
+                </span>
+              </div>
+
+              <div className="space-y-4 text-xs font-mono leading-relaxed text-secondary">
+                <div className="p-4 bg-black border border-white/10 space-y-1">
+                  <span className="text-accent font-bold">1. Ставки Участников:</span>
+                  <p className="text-zinc-300">Ставки принимаются исключительно в токенах $KOMMUNARKA. Средства участников замораживаются смарт-контрактом на время аукциона.</p>
+                </div>
+
+                <div className="p-4 bg-black border border-white/10 space-y-1">
+                  <span className="text-accent font-bold">2. Права Проигравших (100% Возврат):</span>
+                  <p className="text-zinc-300">Все несыгравшие ставки автоматически возвращаются на кошельки участников. Проигравшие сохраняют 100% токенов, которые дорожают от сжигания!</p>
+                </div>
+
+                <div className="p-4 bg-black border border-white/10 space-y-1">
+                  <span className="text-accent font-bold">3. Победная Ставка (75% Burn / 25% Artist):</span>
+                  <p className="text-zinc-300">75% токенов победителя сжигается на Dead-адрес (сокращая эмиссию). 25% токенов переводится Создателю/Художнику.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Model 2 Walkthrough */}
+            <div className="p-8 border border-white/20 bg-white/[0.01] space-y-6">
+              <div className="flex justify-between items-center pb-4 border-b border-white/10">
+                <h3 className="text-lg font-bold font-montserrat uppercase text-white">
+                  Модель 2: Botto-Style Buyback (Выкуп с рынка)
+                </h3>
+                <span className="text-[10px] font-mono text-secondary uppercase border border-white/30 px-2 py-1">
+                  Ставки в SOL / USDT / Фиат
+                </span>
+              </div>
+
+              <div className="space-y-4 text-xs font-mono leading-relaxed text-secondary">
+                <div className="p-4 bg-black border border-white/10 space-y-1">
+                  <span className="text-white font-bold">1. Ставки Участников:</span>
+                  <p className="text-zinc-300">Ставки принимаются в SOL, USDT, USDC или фиатной картой. Низкий барьер для традиционных арт-коллекционеров.</p>
+                </div>
+
+                <div className="p-4 bg-black border border-white/10 space-y-1">
+                  <span className="text-white font-bold">2. Права Проигравших (100% Возврат):</span>
+                  <p className="text-zinc-300">Все несыгравшие SOL/USDT разблокируются на кошельки. Участники зарабатывают на росте курса своего портфеля токенов.</p>
+                </div>
+
+                <div className="p-4 bg-black border border-white/10 space-y-1">
+                  <span className="text-white font-bold">3. Распределение (50% Buyback & Burn / 50% Artist):</span>
+                  <p className="text-zinc-300">50% средств откупают токены $KOMMUNARKA с рынка на Raydium (создавая зеленые свечи) и сжигают их. 50% выплачиваются Художнику.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Interactive Tokenomics Simulator */}
       <section id="burn-simulator" className="py-32 px-6 md:px-12">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4 text-center">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              02 / Simulator / Симулятор Капитализации & Сжигания
+              03 / Simulator / Симулятор Капитализации & Сжигания
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
               Калькулятор Сжигания Токенов $KOMMUNARKA
@@ -314,7 +391,7 @@ export default function AuctionPage() {
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              03 / Analytics / Динамика Капитализации & Эмиссии
+              04 / Analytics / Динамика Капитализации & Эмиссии
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
               Графики Зависимости & Дефляционная Кривая
@@ -426,7 +503,7 @@ export default function AuctionPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="space-y-8">
               <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-                04 / Artist Gateway / Для Художников
+                05 / Artist Gateway / Для Художников
               </span>
               <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter leading-tight">
                 Почему это выгодно авторам?
@@ -484,7 +561,7 @@ export default function AuctionPage() {
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              05 / Logistics & Security / Логистика
+              06 / Logistics & Security / Логистика
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
               Доставка по миру и Vault-Хранение
