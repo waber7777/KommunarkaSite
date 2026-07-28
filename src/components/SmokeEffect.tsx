@@ -12,6 +12,7 @@ export default function SmokeEffect() {
     if (!ctx) return;
 
     let animationFrameId: number;
+    let time = 0;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -21,66 +22,123 @@ export default function SmokeEffect() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Particle system for smoke/fog
-    const particleCount = 45;
-    const particles: Particle[] = [];
+    // Dynamic Smoke Puffs + Floating Ember Sparks
+    const smokePuffCount = 30;
+    const emberCount = 35;
 
-    interface Particle {
+    interface SmokePuff {
       x: number;
       y: number;
-      radius: number;
-      vx: number;
-      vy: number;
+      baseRadius: number;
+      speedX: number;
+      speedY: number;
+      waveFreq: number;
+      waveAmp: number;
       alpha: number;
-      maxAlpha: number;
-      growth: number;
       color: string;
+      angle: number;
+      spinSpeed: number;
     }
 
-    // Industrial palette: subtle charcoal gray, dark amber mist, warm ash
-    const colors = [
-      "rgba(255, 183, 3, ",  // Warm accent amber glow
-      "rgba(120, 120, 120, ", // Industrial smoke gray
-      "rgba(40, 40, 45, ",    // Dark ash mist
-      "rgba(200, 140, 60, "   // Warm ember haze
+    interface Ember {
+      x: number;
+      y: number;
+      size: number;
+      speedY: number;
+      speedX: number;
+      alpha: number;
+      pulseSpeed: number;
+    }
+
+    const smokeColors = [
+      "rgba(255, 183, 3, ",   // Warm amber smoke glow
+      "rgba(140, 140, 150, ",  // Industrial charcoal fog
+      "rgba(80, 80, 95, ",     // Deep ash mist
+      "rgba(210, 130, 40, "   // Ember haze
     ];
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
+    const smokePuffs: SmokePuff[] = [];
+    for (let i = 0; i < smokePuffCount; i++) {
+      smokePuffs.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 250 + 150,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.2 - 0.15, // Slow upward/horizontal drift
-        alpha: Math.random() * 0.15,
-        maxAlpha: Math.random() * 0.12 + 0.04,
-        growth: (Math.random() - 0.5) * 0.05,
-        color: colors[Math.floor(Math.random() * colors.length)]
+        baseRadius: Math.random() * 220 + 180,
+        speedX: (Math.random() - 0.4) * 0.8, // Active drift
+        speedY: -Math.random() * 0.5 - 0.2, // Upward floating motion
+        waveFreq: Math.random() * 0.02 + 0.005,
+        waveAmp: Math.random() * 2.5 + 1.0,
+        alpha: Math.random() * 0.12 + 0.05,
+        color: smokeColors[Math.floor(Math.random() * smokeColors.length)],
+        angle: Math.random() * Math.PI * 2,
+        spinSpeed: (Math.random() - 0.5) * 0.005
+      });
+    }
+
+    const embers: Ember[] = [];
+    for (let i = 0; i < emberCount; i++) {
+      embers.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2.5 + 1.0,
+        speedY: -Math.random() * 1.2 - 0.3,
+        speedX: (Math.random() - 0.5) * 0.6,
+        alpha: Math.random() * 0.8 + 0.2,
+        pulseSpeed: Math.random() * 0.05 + 0.02
       });
     }
 
     const render = () => {
+      time += 0.015;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
+      // Render Floating Smoke Clouds
+      smokePuffs.forEach((p) => {
+        p.x += p.speedX + Math.sin(time * p.waveFreq) * p.waveAmp;
+        p.y += p.speedY;
+        p.angle += p.spinSpeed;
 
-        // Wrap around boundaries
-        if (p.x < -p.radius) p.x = canvas.width + p.radius;
-        if (p.x > canvas.width + p.radius) p.x = -p.radius;
-        if (p.y < -p.radius) p.y = canvas.height + p.radius;
-        if (p.y > canvas.height + p.radius) p.y = -p.radius;
+        // Wrap around viewport boundaries smoothly
+        if (p.y < -p.baseRadius) {
+          p.y = canvas.height + p.baseRadius;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.x < -p.baseRadius) p.x = canvas.width + p.baseRadius;
+        if (p.x > canvas.width + p.baseRadius) p.x = -p.baseRadius;
 
-        // Radial smoke gradient
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-        gradient.addColorStop(0, `${p.color}${p.maxAlpha})`);
-        gradient.addColorStop(0.5, `${p.color}${p.maxAlpha * 0.4})`);
+        const currentRadius = p.baseRadius + Math.sin(time * 2 + p.x * 0.01) * 35;
+        const currentAlpha = p.alpha + Math.sin(time * 1.5 + p.y * 0.01) * 0.03;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+
+        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, currentRadius);
+        gradient.addColorStop(0, `${p.color}${Math.max(0, currentAlpha)})`);
+        gradient.addColorStop(0.5, `${p.color}${Math.max(0, currentAlpha * 0.4)})`);
         gradient.addColorStop(1, `${p.color}0)`);
 
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // Render Floating Industrial Sparks / Embers
+      embers.forEach((e) => {
+        e.y += e.speedY;
+        e.x += e.speedX + Math.sin(time * 3 + e.y * 0.05) * 0.5;
+
+        if (e.y < -10) {
+          e.y = canvas.height + 10;
+          e.x = Math.random() * canvas.width;
+        }
+
+        const currentAlpha = e.alpha * (0.6 + 0.4 * Math.sin(time * 5 + e.x));
+
+        ctx.fillStyle = `rgba(255, 183, 3, ${Math.max(0, currentAlpha)})`;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
         ctx.fill();
       });
 
@@ -96,9 +154,12 @@ export default function SmokeEffect() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-15 opacity-80 mix-blend-screen"
-    />
+    <div className="fixed inset-0 pointer-events-none z-15 overflow-hidden">
+      {/* Dynamic Animated Canvas Smoke */}
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full opacity-90 mix-blend-screen"
+      />
+    </div>
   );
 }
