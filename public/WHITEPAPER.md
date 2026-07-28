@@ -12,7 +12,7 @@
 5. [Botto DAO Blueprint: Why Investors Hold the Token](#5-botto-dao-blueprint)
 6. [Protocol Architecture: Step-by-Step Auction Models](#6-protocol-architecture)
 7. [International Logistics: Artwork Shipping from Russia](#7-international-logistics)
-8. [NFT Value & Vaulted Exhibition Yield](#8-nft-value--vaulted-exhibition-yield)
+8. [NFT Value: Physical Home Delivery vs Gallery Vault Staking](#8-nft-value-physical-home-delivery-vs-gallery-vault-staking)
 9. [Financial Model: 3-Way Synergy & Artist Payouts](#9-financial-model)
 10. [Growth Scenarios & Risk Governance](#10-growth-scenarios--risk-governance)
 11. [Step-by-Step Launch Roadmap](#11-step-by-step-launch-roadmap)
@@ -102,13 +102,21 @@ Deep-dive research across crypto communities (`r/CryptoCurrency`, `r/solana`, `r
 
 ---
 
-## 8. NFT Value & Vaulted Exhibition Yield
+## 8. NFT Value: Physical Home Delivery vs Gallery Vault Staking
 
-### A. Vault & Claim Model
-Physical artwork stays in secure studio vaults while the NFT trades 24/7 globally without shipping delays. Owners can click `Redeem Physical` anytime to ship the physical piece home.
+> **What happens to the NFT and yield when an artwork is delivered home vs kept in the gallery?**
 
-### B. Exhibition & Licensing Yield
-Physical pieces tour galleries and exhibitions. NFT holders receive a share of ticket sales, merchandise revenue, and commercial licensing rights.
+The auction winner has two distinct choices of asset ownership:
+
+### 🏠 Scenario 1: Winner Claims Physical Delivery Home
+* The winner triggers shipping. The artwork is packaged and delivered via insured courier to their residence.
+* **NFT Status:** The 1-of-1 NFT resides in the owner's wallet as an exclusive digital provenance passport.
+* **Yield Impact:** Because the artwork is physically at home and no longer touring in the gallery foundation, **this un-staked NFT does not generate exhibition yield**. The owner holds the physical original and title.
+
+### 🏛️ Scenario 2: Artwork Remains in Gallery Vault (Vaulted Staking)
+* The winner chooses to leave the physical artwork in the studio gallery foundation to tour global exhibitions and fairs.
+* **NFT Status:** The winner stakes their 1-of-1 NFT into the **Gallery Vault Contract** (`Staked NFT`).
+* **Passive Exhibition Yield:** While staked, the owner **receives regular dividend payouts in SOL/USDT** generated from exhibition ticket sales, merchandise profits, and commercial licensing rights!
 
 ---
 
@@ -118,7 +126,7 @@ Physical pieces tour galleries and exhibitions. NFT holders receive a share of t
 | :--- | :--- |
 | **Founders & Core Team** | • 5-8% Dev Wallet (Vested).<br>• DEX Liquidity Provider (LP) fees.<br>• Token market cap appreciation. |
 | **Artist / Author** | • **Upfront Auction Payout** (25% Burn Bidding / 50% Buyback).<br>• **5-10% Lifetime On-chain Royalties** on all secondary NFT sales.<br>• Global PR. |
-| **Traders & Collectors** | • **Traders:** Systematic deflationary supply reduction.<br>• **Collectors:** Physical masterpiece + NFT passport + exhibition yield. |
+| **Traders & Collectors** | • **Traders:** Systematic deflationary supply reduction.<br>• **Collectors:** Physical masterpiece + NFT passport + exhibition yield when staked. |
 
 ---
 
