@@ -21,9 +21,9 @@ export default function AuctionPage() {
   // Lot #01 Photo Gallery
   const [lotImgIndex, setLotImgIndex] = useState<number>(0);
   const lotImages = [
+    "/assets/artworks/zabor-detail-2.jpg",
     "/assets/artworks/zabor-1.jpg",
-    "/assets/artworks/zabor-detail-1.jpg",
-    "/assets/artworks/zabor-detail-2.jpg"
+    "/assets/artworks/zabor-detail-1.jpg"
   ];
 
   const TOTAL_SUPPLY = 1000000000; // 1,000,000,000 $KOMMUNARKA tokens
