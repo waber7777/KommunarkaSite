@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import GlobalEffects from "@/components/GlobalEffects";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,7 +29,8 @@ export default function RootLayout({
       lang="ru"
       className={`${inter.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="bg-background text-foreground font-sans selection:bg-accent selection:text-white overflow-x-hidden">
+      <body className="bg-background text-foreground font-sans selection:bg-accent selection:text-white overflow-x-hidden relative">
+        <GlobalEffects />
         <SmoothScroll>
           <div className="flex flex-col min-h-screen">
             {children}

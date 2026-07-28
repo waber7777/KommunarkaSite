@@ -145,16 +145,13 @@ export default function AuctionPage() {
 
   return (
     <main className="flex-grow flex flex-col bg-black text-white selection:bg-accent selection:text-black relative">
-      <SmokeEffect />
       <Navigation />
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
-        {/* Control Bar (Language & Sound) */}
-        <div className="absolute top-24 right-6 md:right-12 z-30 flex items-center gap-3">
-          <AmbientAudio lang={lang} />
-          <div className="flex items-center gap-1 border border-white/10 p-1 bg-black/60 backdrop-blur-md text-xs font-mono">
-            <button
+        {/* Language Switcher Bar */}
+        <div className="absolute top-24 right-6 md:right-12 z-30 flex items-center gap-1 border border-white/10 p-1 bg-black/60 backdrop-blur-md text-xs font-mono">
+          <button
               onClick={() => setLang("ru")}
               className={`px-3 py-1 transition-all ${
                 lang === "ru" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
@@ -171,7 +168,6 @@ export default function AuctionPage() {
               EN
             </button>
           </div>
-        </div>
 
         {/* Ambient Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent/10 rounded-full blur-[160px] pointer-events-none" />
