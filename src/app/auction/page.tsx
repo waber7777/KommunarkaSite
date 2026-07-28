@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import TypewriterText from "@/components/TypewriterText";
 import Counter from "@/components/Counter";
+import SmokeEffect from "@/components/SmokeEffect";
 
 export default function AuctionPage() {
   // Language State: 'ru' | 'en'
@@ -142,7 +143,8 @@ export default function AuctionPage() {
   }[lang];
 
   return (
-    <main className="flex-grow flex flex-col bg-black text-white selection:bg-accent selection:text-black">
+    <main className="flex-grow flex flex-col bg-black text-white selection:bg-accent selection:text-black relative">
+      <SmokeEffect />
       <Navigation />
 
       {/* Hero Section */}
