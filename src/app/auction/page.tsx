@@ -18,6 +18,14 @@ export default function AuctionPage() {
   const [auctionBid, setAuctionBid] = useState<number>(25000); // Auction Bid in USD ($5k - $250k)
   const [auctionsCount, setAuctionsCount] = useState<number>(12); // Auctions per year
 
+  // Lot #01 Photo Gallery
+  const [lotImgIndex, setLotImgIndex] = useState<number>(0);
+  const lotImages = [
+    "/assets/artworks/zabor-1.jpg",
+    "/assets/artworks/zabor-detail-1.jpg",
+    "/assets/artworks/zabor-detail-2.jpg"
+  ];
+
   const TOTAL_SUPPLY = 1000000000; // 1,000,000,000 $KOMMUNARKA tokens
   const tokenPrice = marketCap / TOTAL_SUPPLY;
 
@@ -778,15 +786,32 @@ export default function AuctionPage() {
 
           {/* Featured Lot Card */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border border-accent/40 bg-white/[0.01] p-8 md:p-12 items-center">
-            {/* Artwork Image Container */}
-            <div className="relative group overflow-hidden border border-white/10 aspect-[3/4] bg-zinc-950 flex items-center justify-center p-4">
-              <img
-                src="/assets/artworks/page_32.png?v=3"
-                alt="Заборы. Лист №1"
-                className="w-full h-full object-contain filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-              />
-              <div className="absolute top-4 left-4 bg-accent text-black font-mono font-bold text-[10px] uppercase px-3 py-1 tracking-widest">
-                LOT #01 • 1-OF-1 PHYGITAL
+            {/* Artwork Image Container & Gallery Thumbnails */}
+            <div className="space-y-4">
+              <div className="relative group overflow-hidden border border-white/10 aspect-[3/4] bg-black flex items-center justify-center p-2">
+                <img
+                  src={lotImages[lotImgIndex]}
+                  alt="Заборы. Лист №1"
+                  className="w-full h-full object-contain filter contrast-110 group-hover:scale-105 transition-all duration-700"
+                />
+                <div className="absolute top-4 left-4 bg-accent text-black font-mono font-bold text-[10px] uppercase px-3 py-1 tracking-widest">
+                  LOT #01 • 1-OF-1 PHYGITAL
+                </div>
+              </div>
+
+              {/* Thumbnails */}
+              <div className="grid grid-cols-3 gap-3">
+                {lotImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setLotImgIndex(idx)}
+                    className={`border overflow-hidden aspect-square bg-zinc-950 p-1 transition-all ${
+                      lotImgIndex === idx ? "border-accent ring-1 ring-accent" : "border-white/10 opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={img} alt={`Вид ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
               </div>
             </div>
 
