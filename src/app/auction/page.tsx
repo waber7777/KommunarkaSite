@@ -7,6 +7,9 @@ import TypewriterText from "@/components/TypewriterText";
 import Counter from "@/components/Counter";
 
 export default function AuctionPage() {
+  // Language State: 'ru' | 'en'
+  const [lang, setLang] = useState<"ru" | "en">("ru");
+
   // Calculator mode: 'burn-bidding' or 'botto-buyback'
   const [calcMode, setCalcMode] = useState<"burn-bidding" | "botto-buyback">("burn-bidding");
   
@@ -38,12 +41,124 @@ export default function AuctionPage() {
   const annualBurnedUSD = burnedUSD * auctionsCount;
   const annualSupplyPercent = ((annualBurnedTokensCount / TOTAL_SUPPLY) * 100).toFixed(1);
 
+  // Translations dictionary
+  const t = {
+    ru: {
+      badge: "Phygital Протокол • Solana Mainnet • Двухрежимное Сжигание",
+      heroTitleSub: "Sacred Industrial",
+      heroTitleMain: "Аукцион & Протокол",
+      heroDesc: "Московская мастерская «Коммунарка» представляет Phygital-протокол. Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка уничтожает токены $KOMMUNARKA на рынке.",
+      btnAuction: "Смотреть 1-й Аукцион",
+      btnScenarios: "Сценарии 2-х Моделей",
+      archSub: "01 / Architecture / Архитектура",
+      archTitle: "Триада Phygital-Протокола",
+      arch1Tag: "[01] АКТИВ",
+      arch1Title: "Физический Артефакт",
+      arch1Desc: "Художники мастерской создают утончённые объекты из фарфора, бетона и металла. Каждый предмет оснащается NFC-микрочипом подлинности и 1-of-1 NFT паспортом.",
+      arch2Tag: "[02] ДЕФЛЯЦИЯ",
+      arch2Title: "Burn Auction Engine",
+      arch2Desc: "Торги проходят на смарт-контрактах Solana. Победная ставка рассчитывается в токенах $KOMMUNARKA и сжигается, сокращая общую эмиссию монеты.",
+      arch3Tag: "[03] ДОХОДНОСТЬ",
+      arch3Title: "Vault & Exhibition Yield",
+      arch3Desc: "Картины выставляются в реальных арт-галереях. Держатели токенов и NFT участвуют в доходах от выставочных билетов, мерча и коммерческих лицензий.",
+      stepSub: "02 / Execution Scenarios / Шаг за Шагом",
+      stepTitle: "Пошаговый Сценарий Работы 2-х Моделей",
+      stepDesc: "Сравнение механики проведения торгов, расчетов с Художником и прав проигравших участников.",
+      calcSub: "03 / Simulator / Симулятор Капитализации & Сжигания",
+      calcTitle: "Калькулятор Сжигания Токенов $KOMMUNARKA",
+      calcDesc: "Настройте текущую капитализацию монеты $KOMMUNARKA и размер ставки, чтобы рассчитать точное количество уничтожаемых токенов.",
+      mode1: "Модель 1: Burn Bidding (75% Burn)",
+      mode2: "Модель 2: Botto-Style Buyback (50% Buyback)",
+      sliderMC: "Капитализация монеты $KOMMUNARKA (Market Cap):",
+      sliderBid: "Сумма победной ставки на аукционе:",
+      sliderCount: "Количество аукционов в год:",
+      resBurned: "Сожжено токенов с 1 аукциона:",
+      resArtist: "Выплата Автору:",
+      resAnnual: "Годовой дефляционный эффект:",
+      analyticsSub: "04 / Analytics / Динамика Капитализации & Эмиссии",
+      analyticsTitle: "Графики Зависимости & Дефляционная Кривая",
+      artistSub: "05 / Artist Gateway / Для Художников",
+      artistTitle: "Почему это выгодно авторам?",
+      logisticsSub: "06 / Logistics & Security / Логистика",
+      logisticsTitle: "Доставка по миру и Vault-Хранение",
+      teaserSub: "Upcoming Auction #01",
+      teaserTitle: "Первый Phygital Арт-Аукцион",
+      teaserBtn: "Скоро Открытие Торгов",
+      whitepaperBtn: "Whitepaper (English)",
+      strategyBtn: "Стратегия (Russian)"
+    },
+    en: {
+      badge: "Phygital Protocol • Solana Mainnet • Dual Burn Engine",
+      heroTitleSub: "Sacred Industrial",
+      heroTitleMain: "Auction & Protocol",
+      heroDesc: "Moscow Studio Kommunarka presents the Phygital Protocol. Transforming porcelain and steel into deflationary tokenomics: every winning bid destroys $KOMMUNARKA tokens from circulation.",
+      btnAuction: "View Auction #01",
+      btnScenarios: "View 2 Protocol Models",
+      archSub: "01 / Architecture",
+      archTitle: "Phygital Protocol Triad",
+      arch1Tag: "[01] ASSET",
+      arch1Title: "Physical Artifact",
+      arch1Desc: "Studio artists craft physical sculptures in porcelain, concrete, and steel. Each item is equipped with an NFC authentication chip and a 1-of-1 NFT provenance passport.",
+      arch2Tag: "[02] DEFLATION",
+      arch2Title: "Burn Auction Engine",
+      arch2Desc: "Auctions execute on Solana smart contracts. Winning bids permanently burn $KOMMUNARKA tokens, generating systematic market scarcity.",
+      arch3Tag: "[03] YIELD",
+      arch3Title: "Vault & Exhibition Yield",
+      arch3Desc: "Physical artworks tour global galleries. Token and NFT holders share in ticket sale revenues, merchandise profits, and commercial licensing.",
+      stepSub: "02 / Execution Scenarios",
+      stepTitle: "Step-by-Step Model Execution",
+      stepDesc: "Comparison of auction mechanics, artist compensation, and non-winning bidder protection.",
+      calcSub: "03 / Simulator",
+      calcTitle: "$KOMMUNARKA Tokenomics Burn Calculator",
+      calcDesc: "Adjust Market Cap and auction bid value to project exact token burn volume and supply reduction.",
+      mode1: "Model 1: Burn Bidding (75% Burn)",
+      mode2: "Model 2: Botto-Style Buyback (50% Buyback)",
+      sliderMC: "$KOMMUNARKA Token Market Cap:",
+      sliderBid: "Winning Auction Bid Value:",
+      sliderCount: "Auctions per Year:",
+      resBurned: "Tokens Burned per Auction:",
+      resArtist: "Artist Compensation:",
+      resAnnual: "Annual Deflation Impact:",
+      analyticsSub: "04 / Analytics",
+      analyticsTitle: "Market Cap & Deflation Curve Charts",
+      artistSub: "05 / Artist Gateway",
+      artistTitle: "Why Artists Win With Us",
+      logisticsSub: "06 / Logistics & Security",
+      logisticsTitle: "Global Shipping & Vault Depositories",
+      teaserSub: "Upcoming Auction #01",
+      teaserTitle: "First Phygital Art Auction",
+      teaserBtn: "Bidding Opens Soon",
+      whitepaperBtn: "Whitepaper (English)",
+      strategyBtn: "Strategy (Russian)"
+    }
+  }[lang];
+
   return (
     <main className="flex-grow flex flex-col bg-black text-white selection:bg-accent selection:text-black">
       <Navigation />
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
+        {/* Language Switcher Bar */}
+        <div className="absolute top-24 right-6 md:right-12 z-30 flex items-center gap-2 border border-white/10 p-1 bg-black/60 backdrop-blur-md text-xs font-mono">
+          <button
+            onClick={() => setLang("ru")}
+            className={`px-3 py-1 transition-all ${
+              lang === "ru" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
+            }`}
+          >
+            RU
+          </button>
+          <button
+            onClick={() => setLang("en")}
+            className={`px-3 py-1 transition-all ${
+              lang === "en" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
+            }`}
+          >
+            EN
+          </button>
+        </div>
+
         {/* Ambient Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent/10 rounded-full blur-[160px] pointer-events-none" />
 
@@ -51,7 +166,7 @@ export default function AuctionPage() {
           <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/10 bg-white/[0.03] backdrop-blur-md mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             <span className="text-[10px] md:text-xs font-mono tracking-[0.25em] text-secondary uppercase">
-              Phygital Protocol • Solana Mainnet • Dual Burn Engine
+              {t.badge}
             </span>
           </div>
 
@@ -63,7 +178,7 @@ export default function AuctionPage() {
                 transition={{ duration: 1, delay: 0.2 }}
                 className="block text-secondary opacity-40"
               >
-                Sacred Industrial
+                {t.heroTitleSub}
               </motion.span>
             </span>
             <span className="overflow-hidden">
@@ -73,7 +188,7 @@ export default function AuctionPage() {
                 transition={{ duration: 1, delay: 0.4 }}
                 className="block text-accent"
               >
-                Аукцион & Протокол
+                {t.heroTitleMain}
               </motion.span>
             </span>
           </h1>
@@ -85,8 +200,7 @@ export default function AuctionPage() {
             className="mt-8 max-w-2xl"
           >
             <p className="text-secondary text-sm md:text-lg leading-relaxed uppercase font-light tracking-[0.1em] border-l-2 border-accent/50 pl-6">
-              Московская мастерская «Коммунарка» представляет Phygital-протокол. <br className="hidden md:block" />
-              Трансформация фарфора и металла в дефляционную токеномику: каждая победная ставка уничтожает токены $KOMMUNARKA на рынке.
+              {t.heroDesc}
             </p>
           </motion.div>
 
@@ -100,13 +214,21 @@ export default function AuctionPage() {
               href="#first-auction"
               className="px-8 py-4 bg-accent text-black font-bold uppercase tracking-[0.15em] font-mono text-xs hover:bg-white transition-colors"
             >
-              Смотреть 1-й Аукцион
+              {t.btnAuction}
             </a>
             <a
               href="#step-by-step"
               className="px-8 py-4 border border-white/20 text-white font-mono uppercase tracking-[0.15em] text-xs hover:border-accent hover:text-accent transition-colors bg-white/[0.02]"
             >
-              Сценарии 2-х Моделей
+              {t.btnScenarios}
+            </a>
+            <a
+              href={lang === "en" ? "/WHITEPAPER.md" : "/KOMMUNARKA_STRATEGY.md"}
+              target="_blank"
+              rel="noreferrer"
+              className="px-8 py-4 border border-accent/40 text-accent font-mono uppercase tracking-[0.15em] text-xs hover:bg-accent hover:text-black transition-colors"
+            >
+              {lang === "en" ? "Read Whitepaper (EN)" : "Читать Стратегию (RU)"}
             </a>
           </motion.div>
         </div>
@@ -117,35 +239,35 @@ export default function AuctionPage() {
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              01 / Architecture / Архитектура
+              {t.archSub}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Триада Phygital-Протокола
+              {t.archTitle}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 border border-white/10 space-y-6 hover:border-accent/50 transition-colors bg-black/40">
-              <span className="text-xs font-mono text-accent uppercase tracking-widest block">[01] АКТИВ</span>
-              <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Физический Артефакт</h3>
+              <span className="text-xs font-mono text-accent uppercase tracking-widest block">{t.arch1Tag}</span>
+              <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">{t.arch1Title}</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
-                Художники мастерской создают утончённые объекты из фарфора, бетона и металла. Каждый предмет оснащается NFC-микрочипом подлинности и 1-of-1 NFT паспортом.
+                {t.arch1Desc}
               </p>
             </div>
 
             <div className="p-8 border border-white/10 space-y-6 hover:border-accent/50 transition-colors bg-black/40">
-              <span className="text-xs font-mono text-accent uppercase tracking-widest block">[02] ДЕФЛЯЦИЯ</span>
-              <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Burn Auction Engine</h3>
+              <span className="text-xs font-mono text-accent uppercase tracking-widest block">{t.arch2Tag}</span>
+              <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">{t.arch2Title}</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
-                Торги проходят на смарт-контрактах Solana. Победная ставка рассчитывается в токенах $KOMMUNARKA и сжигается, сокращая общую эмиссию монеты.
+                {t.arch2Desc}
               </p>
             </div>
 
             <div className="p-8 border border-white/10 space-y-6 hover:border-accent/50 transition-colors bg-black/40">
-              <span className="text-xs font-mono text-accent uppercase tracking-widest block">[03] ДОХОДНОСТЬ</span>
-              <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">Vault & Exhibition Yield</h3>
+              <span className="text-xs font-mono text-accent uppercase tracking-widest block">{t.arch3Tag}</span>
+              <h3 className="text-xl font-bold font-montserrat uppercase tracking-tight">{t.arch3Title}</h3>
               <p className="text-secondary text-sm leading-relaxed font-light">
-                Картины выставляются в реальных арт-галереях. Держатели токенов и NFT участвуют в доходах от выставочных билетов, мерча и коммерческих лицензий.
+                {t.arch3Desc}
               </p>
             </div>
           </div>
@@ -157,13 +279,13 @@ export default function AuctionPage() {
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-4 text-center">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              02 / Execution Scenarios / Шаг за Шагом
+              {t.stepSub}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Пошаговый Сценарий Работы 2-х Моделей
+              {t.stepTitle}
             </h2>
             <p className="text-secondary text-sm md:text-base max-w-2xl mx-auto font-light">
-              Сравнение механики проведения торгов, расчетов с Художником и прав проигравших участников.
+              {t.stepDesc}
             </p>
           </div>
 
@@ -172,27 +294,39 @@ export default function AuctionPage() {
             <div className="p-8 border border-accent/40 bg-white/[0.01] space-y-6">
               <div className="flex justify-between items-center pb-4 border-b border-white/10">
                 <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
-                  Модель 1: Burn Bidding (Прямые ставки)
+                  {lang === "ru" ? "Модель 1: Burn Bidding (Прямые ставки)" : "Model 1: Burn Bidding (Direct Bids)"}
                 </h3>
                 <span className="text-[10px] font-mono text-secondary uppercase border border-accent/30 px-2 py-1">
-                  Ставки в $KOMMUNARKA
+                  $KOMMUNARKA
                 </span>
               </div>
 
               <div className="space-y-4 text-xs font-mono leading-relaxed text-secondary">
                 <div className="p-4 bg-black border border-white/10 space-y-1">
-                  <span className="text-accent font-bold">1. Ставки Участников:</span>
-                  <p className="text-zinc-300">Ставки принимаются исключительно в токенах $KOMMUNARKA. Средства участников замораживаются смарт-контрактом на время аукциона.</p>
+                  <span className="text-accent font-bold">1. {lang === "ru" ? "Ставки Участников" : "Participant Bids"}:</span>
+                  <p className="text-zinc-300">
+                    {lang === "ru"
+                      ? "Ставки принимаются исключительно в токенах $KOMMUNARKA. Средства участников замораживаются смарт-контрактом на время аукциона."
+                      : "Bids are placed strictly in $KOMMUNARKA tokens. Participant funds are locked in smart contracts for the auction duration."}
+                  </p>
                 </div>
 
                 <div className="p-4 bg-black border border-white/10 space-y-1">
-                  <span className="text-accent font-bold">2. Права Проигравших (100% Возврат):</span>
-                  <p className="text-zinc-300">Все несыгравшие ставки автоматически возвращаются на кошельки участников. Проигравшие сохраняют 100% токенов, которые дорожают от сжигания!</p>
+                  <span className="text-accent font-bold">2. {lang === "ru" ? "Права Проигравших (100% Возврат)" : "Non-winning Bidders (100% Refund)"}:</span>
+                  <p className="text-zinc-300">
+                    {lang === "ru"
+                      ? "Все несыгравшие ставки автоматически возвращаются на кошельки участников. Проигравшие сохраняют 100% токенов, которые дорожают от сжигания!"
+                      : "All non-winning bids are instantly refunded to bidder wallets. Unsuccessful bidders retain 100% of their tokens, which appreciate from the burn!"}
+                  </p>
                 </div>
 
                 <div className="p-4 bg-black border border-white/10 space-y-1">
-                  <span className="text-accent font-bold">3. Победная Ставка (75% Burn / 25% Artist):</span>
-                  <p className="text-zinc-300">75% токенов победителя сжигается на Dead-адрес (сокращая эмиссию). 25% токенов переводится Создателю/Художнику.</p>
+                  <span className="text-accent font-bold">3. {lang === "ru" ? "Победная Ставка (75% Burn / 25% Artist)" : "Winning Bid Allocation"}:</span>
+                  <p className="text-zinc-300">
+                    {lang === "ru"
+                      ? "75% токенов победителя сжигается на Dead-адрес (сокращая эмиссию). 25% токенов переводится Создателю/Художнику."
+                      : "75% of winning tokens are permanently burned to a dead address. 25% is transferred directly to the Artist."}
+                  </p>
                 </div>
               </div>
             </div>
@@ -201,27 +335,39 @@ export default function AuctionPage() {
             <div className="p-8 border border-white/20 bg-white/[0.01] space-y-6">
               <div className="flex justify-between items-center pb-4 border-b border-white/10">
                 <h3 className="text-lg font-bold font-montserrat uppercase text-white">
-                  Модель 2: Botto-Style Buyback (Выкуп с рынка)
+                  {lang === "ru" ? "Модель 2: Botto-Style Buyback (Выкуп с рынка)" : "Model 2: Botto-Style Buyback"}
                 </h3>
                 <span className="text-[10px] font-mono text-secondary uppercase border border-white/30 px-2 py-1">
-                  Ставки в SOL / USDT / Фиат
+                  SOL / USDT / Fiat
                 </span>
               </div>
 
               <div className="space-y-4 text-xs font-mono leading-relaxed text-secondary">
                 <div className="p-4 bg-black border border-white/10 space-y-1">
-                  <span className="text-white font-bold">1. Ставки Участников:</span>
-                  <p className="text-zinc-300">Ставки принимаются в SOL, USDT, USDC или фиатной картой. Низкий барьер для традиционных арт-коллекционеров.</p>
+                  <span className="text-white font-bold">1. {lang === "ru" ? "Ставки Участников" : "Participant Bids"}:</span>
+                  <p className="text-zinc-300">
+                    {lang === "ru"
+                      ? "Ставки принимаются в SOL, USDT, USDC или фиатной картой. Низкий барьер для традиционных арт-коллекционеров."
+                      : "Bids accepted in SOL, USDT, USDC, or credit cards. Frictionless onboarding for traditional art collectors."}
+                  </p>
                 </div>
 
                 <div className="p-4 bg-black border border-white/10 space-y-1">
-                  <span className="text-white font-bold">2. Права Проигравших (100% Возврат):</span>
-                  <p className="text-zinc-300">Все несыгравшие SOL/USDT разблокируются на кошельки. Участники зарабатывают на росте курса своего портфеля токенов.</p>
+                  <span className="text-white font-bold">2. {lang === "ru" ? "Права Проигравших (100% Возврат)" : "Non-winning Bidders (100% Refund)"}:</span>
+                  <p className="text-zinc-300">
+                    {lang === "ru"
+                      ? "Все несыгравшие SOL/USDT разблокируются на кошельки. Участники зарабатывают на росте курса своего портфеля токенов."
+                      : "All non-winning funds instantly unlocked. Token holders benefit from market buyback appreciation."}
+                  </p>
                 </div>
 
                 <div className="p-4 bg-black border border-white/10 space-y-1">
-                  <span className="text-white font-bold">3. Распределение (50% Buyback & Burn / 50% Artist):</span>
-                  <p className="text-zinc-300">50% средств откупают токены $KOMMUNARKA с рынка на Raydium (создавая зеленые свечи) и сжигают их. 50% выплачиваются Художнику.</p>
+                  <span className="text-white font-bold">3. {lang === "ru" ? "Распределение (50% Buyback & Burn / 50% Artist)" : "Proceeds Allocation"}:</span>
+                  <p className="text-zinc-300">
+                    {lang === "ru"
+                      ? "50% средств откупают токены $KOMMUNARKA с рынка на Raydium (создавая зеленые свечи) и сжигают их. 50% выплачиваются Художнику."
+                      : "50% of proceeds execute DEX Market Buy on Raydium (green candles) and burn acquired tokens. 50% paid to Artist."}
+                  </p>
                 </div>
               </div>
             </div>
@@ -234,13 +380,13 @@ export default function AuctionPage() {
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4 text-center">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              03 / Simulator / Симулятор Капитализации & Сжигания
+              {t.calcSub}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Калькулятор Сжигания Токенов $KOMMUNARKA
+              {t.calcTitle}
             </h2>
             <p className="text-secondary text-sm md:text-base max-w-xl mx-auto font-light">
-              Настройте текущую капитализацию монеты $KOMMUNARKA и размер ставки, чтобы рассчитать точное количество уничтожаемых токенов.
+              {t.calcDesc}
             </p>
           </div>
 
@@ -254,7 +400,7 @@ export default function AuctionPage() {
                   : "border-transparent text-secondary hover:text-white"
               }`}
             >
-              Модель 1: Burn Bidding (75% Burn)
+              {t.mode1}
             </button>
             <button
               onClick={() => setCalcMode("botto-buyback")}
@@ -264,7 +410,7 @@ export default function AuctionPage() {
                   : "border-transparent text-secondary hover:text-white"
               }`}
             >
-              Модель 2: Botto-Style Buyback (50% Buyback)
+              {t.mode2}
             </button>
           </div>
 
@@ -272,7 +418,7 @@ export default function AuctionPage() {
             {/* Slider 1: Token Market Cap */}
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
-                <span className="text-secondary">Капитализация монеты $KOMMUNARKA (Market Cap):</span>
+                <span className="text-secondary">{t.sliderMC}</span>
                 <span className="text-accent font-bold text-2xl">${marketCap.toLocaleString()} USD</span>
               </div>
               <input
@@ -291,14 +437,15 @@ export default function AuctionPage() {
                 <span>$50,000,000</span>
               </div>
               <div className="text-[10px] font-mono text-secondary">
-                Расчетная цена 1 токена: <span className="text-white">${tokenPrice.toFixed(6)} USD</span> (при Supply 1 млрд монеты)
+                {lang === "ru" ? "Расчетная цена 1 токена:" : "Estimated Token Price:"}{" "}
+                <span className="text-white">${tokenPrice.toFixed(6)} USD</span> (Supply 1B)
               </div>
             </div>
 
             {/* Slider 2: Auction Bid */}
             <div className="space-y-4 pt-4 border-t border-white/5">
               <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
-                <span className="text-secondary">Сумма победной ставки на аукционе:</span>
+                <span className="text-secondary">{t.sliderBid}</span>
                 <span className="text-accent font-bold text-2xl">${auctionBid.toLocaleString()} USD</span>
               </div>
               <input
@@ -320,8 +467,8 @@ export default function AuctionPage() {
             {/* Slider 3: Auctions Count */}
             <div className="space-y-4 pt-4 border-t border-white/5">
               <div className="flex justify-between items-center text-xs md:text-sm font-mono uppercase tracking-widest">
-                <span className="text-secondary">Количество аукционов в год:</span>
-                <span className="text-accent font-bold text-xl">{auctionsCount} аукционов</span>
+                <span className="text-secondary">{t.sliderCount}</span>
+                <span className="text-accent font-bold text-xl">{auctionsCount} {lang === "ru" ? "аукционов" : "auctions"}</span>
               </div>
               <input
                 type="range"
@@ -333,9 +480,9 @@ export default function AuctionPage() {
                 className="w-full h-2 bg-white/10 appearance-none cursor-pointer accent-accent"
               />
               <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
-                <span>2 (Раз в полгода)</span>
-                <span>12 (Ежемесячно)</span>
-                <span>52 (Еженедельно)</span>
+                <span>2 ({lang === "ru" ? "Раз в полгода" : "Biannual"})</span>
+                <span>12 ({lang === "ru" ? "Ежемесячно" : "Monthly"})</span>
+                <span>52 ({lang === "ru" ? "Еженедельно" : "Weekly"})</span>
               </div>
             </div>
 
@@ -343,43 +490,45 @@ export default function AuctionPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-white/10">
               <div className="p-6 border border-accent/40 bg-accent/5 space-y-3">
                 <span className="text-[10px] font-mono text-accent uppercase tracking-widest block">
-                  Сожжено токенов с 1 аукциона:
+                  {t.resBurned}
                 </span>
                 <div className="text-2xl font-bold text-white font-montserrat">
                   {burnedTokensCount.toLocaleString()} <span className="text-sm font-mono text-accent">$KOMMUNARKA</span>
                 </div>
                 <div className="text-xs font-mono text-accent font-bold">
-                  Сокращение эмиссии: -{burnedSupplyPercent}% за 1 торги
+                  {lang === "ru" ? "Сокращение эмиссии:" : "Supply Cut:"} -{burnedSupplyPercent}%
                 </div>
                 <div className="text-[10px] font-mono text-secondary">
-                  Эквивалент: ${burnedUSD.toLocaleString()} USD
+                  USD: ${burnedUSD.toLocaleString()}
                 </div>
               </div>
 
               <div className="p-6 border border-white/10 bg-black/40 space-y-3">
                 <span className="text-[10px] font-mono text-secondary uppercase tracking-widest block">
-                  Выплата Автору ({artistRate * 100}%):
+                  {t.resArtist} ({artistRate * 100}%):
                 </span>
                 <div className="text-2xl font-bold text-accent font-montserrat">
                   {artistTokensCount.toLocaleString()} <span className="text-sm font-mono text-white">$KOMMUNARKA</span>
                 </div>
                 <div className="text-xs font-mono text-white font-bold">
-                  Эквивалент: ${artistUSD.toLocaleString()} USD
+                  USD: ${artistUSD.toLocaleString()}
                 </div>
-                <div className="text-[10px] font-mono text-secondary">Вознаграждение за созданный артефакт</div>
+                <div className="text-[10px] font-mono text-secondary">
+                  {lang === "ru" ? "Вознаграждение за артефакт" : "Direct artist compensation"}
+                </div>
               </div>
 
               <div className="p-6 border border-white/10 bg-black/40 space-y-3">
                 <span className="text-[10px] font-mono text-secondary uppercase tracking-widest block">
-                  Годовой дефляционный эффект:
+                  {t.resAnnual}
                 </span>
                 <div className="text-2xl font-bold text-white font-montserrat">
                   {annualBurnedTokensCount.toLocaleString()} <span className="text-sm font-mono text-accent">$KOMMUNARKA</span>
                 </div>
                 <div className="text-xs font-mono text-accent font-bold">
-                  -{annualSupplyPercent}% от общей эмиссии за год!
+                  -{annualSupplyPercent}% {lang === "ru" ? "от эмиссии в год!" : "total annual supply burned!"}
                 </div>
-                <div className="text-[10px] font-mono text-secondary">Суммарное сжигание: ${annualBurnedUSD.toLocaleString()} USD</div>
+                <div className="text-[10px] font-mono text-secondary">USD: ${annualBurnedUSD.toLocaleString()}</div>
               </div>
             </div>
           </div>
@@ -391,10 +540,10 @@ export default function AuctionPage() {
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              04 / Analytics / Динамика Капитализации & Эмиссии
+              {t.analyticsSub}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Графики Зависимости & Дефляционная Кривая
+              {t.analyticsTitle}
             </h2>
           </div>
 
@@ -403,14 +552,16 @@ export default function AuctionPage() {
             <div className="p-8 border border-white/10 bg-black space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
-                  Прогноз Капитализации ($)
+                  {lang === "ru" ? "Прогноз Капитализации ($)" : "Market Cap Projection ($)"}
                 </h3>
                 <span className="text-[10px] font-mono text-secondary uppercase">
-                  Текущая Cap: ${marketCap.toLocaleString()}
+                  Cap: ${marketCap.toLocaleString()}
                 </span>
               </div>
               <p className="text-secondary text-xs font-light">
-                Рост капитализации при ежедневном/ежемесячном сокращении токенов $KOMMUNARKA на аукционах.
+                {lang === "ru"
+                  ? "Рост капитализации при ежедневном/ежемесячном сокращении токенов $KOMMUNARKA на аукционах."
+                  : "Market cap appreciation curve generated by systematic auction token burns."}
               </p>
 
               {/* Styled SVG Chart */}
@@ -445,9 +596,9 @@ export default function AuctionPage() {
               </div>
 
               <div className="flex justify-between text-[10px] font-mono text-secondary uppercase pt-2 border-t border-white/5">
-                <span>Текущая: ${marketCap.toLocaleString()}</span>
-                <span>Прогноз 6 мес: ${(marketCap * 2.2).toLocaleString()}</span>
-                <span className="text-accent font-bold">Прогноз 12 мес: ${(marketCap * 5.4).toLocaleString()}</span>
+                <span>Start: ${marketCap.toLocaleString()}</span>
+                <span>6M: ${(marketCap * 2.2).toLocaleString()}</span>
+                <span className="text-accent font-bold">12M: ${(marketCap * 5.4).toLocaleString()}</span>
               </div>
             </div>
 
@@ -455,14 +606,16 @@ export default function AuctionPage() {
             <div className="p-8 border border-white/10 bg-black space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-bold font-montserrat uppercase text-accent">
-                  Сокращение Эмиссии Монеты (%)
+                  {lang === "ru" ? "Сокращение Эмиссии Монеты (%)" : "Supply Reduction Deflation Curve (%)"}
                 </h3>
                 <span className="text-[10px] font-mono text-secondary uppercase">
-                  Годовое сжигание: -{annualSupplyPercent}%
+                  Annual Burn: -{annualSupplyPercent}%
                 </span>
               </div>
               <p className="text-secondary text-xs font-light">
-                Кривая уменьшения штук токенов в обращении (оранжевая) и рост стоимости 1 монеты $KOMMUNARKA (белая).
+                {lang === "ru"
+                  ? "Кривая уменьшения штук токенов в обращении (оранжевая) и рост стоимости 1 монеты $KOMMUNARKA (белая)."
+                  : "Circulating token reduction curve (orange) vs token unit price appreciation (white)."}
               </p>
 
               {/* Styled SVG Chart 2 */}
@@ -489,8 +642,8 @@ export default function AuctionPage() {
               </div>
 
               <div className="flex justify-between text-[10px] font-mono text-secondary uppercase pt-2 border-t border-white/5">
-                <span className="text-accent">● Эмиссия монеты $KOMMUNARKA (Сжигание)</span>
-                <span className="text-white">-- Рост цены 1 монеты ($)</span>
+                <span className="text-accent">● {lang === "ru" ? "Эмиссия токена" : "Circulating Supply"}</span>
+                <span className="text-white">-- {lang === "ru" ? "Цена 1 монеты" : "Token Price"}</span>
               </div>
             </div>
           </div>
@@ -503,20 +656,22 @@ export default function AuctionPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="space-y-8">
               <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-                05 / Artist Gateway / Для Художников
+                {t.artistSub}
               </span>
               <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter leading-tight">
-                Почему это выгодно авторам?
+                {t.artistTitle}
               </h2>
               <p className="text-secondary text-base leading-relaxed font-light">
-                Мы предлагаем авторам трансформировать классическую модель продаж. Традиционная галерея забирает до 50% комиссии, в то время как наш протокол гарантирует высокую оплату за работу и пожизненные роялти.
+                {lang === "ru"
+                  ? "Мы предлагаем авторам трансформировать классическую модель продаж. Традиционная галерея забирает до 50% комиссии, в то время как наш протокол гарантирует высокую оплату за работу и пожизненные роялти."
+                  : "We empower traditional artists to break free from traditional 50% gallery commissions. Our protocol provides direct auction payouts and lifetime secondary on-chain royalties."}
               </p>
 
               <div className="space-y-6 border-l-2 border-accent/40 pl-6 font-mono text-xs md:text-sm uppercase tracking-wider text-secondary leading-loose">
-                <p className="hover:text-white transition-colors">1. Гарантированный доход за каждую физическую работу сразу после аукциона</p>
-                <p className="hover:text-white transition-colors">2. 5–10% роялти от ВСЕХ будущих перепродаж NFT-паспорта картины</p>
-                <p className="hover:text-white transition-colors">3. Глобальная аудитория коллекционеров по всему миру</p>
-                <p className="hover:text-white transition-colors">4. Сохранение ценности физического холста (масло, фарфор, сталь)</p>
+                <p className="hover:text-white transition-colors">1. {lang === "ru" ? "Гарантированный доход за каждую работу" : "Direct upfront compensation per artwork"}</p>
+                <p className="hover:text-white transition-colors">2. {lang === "ru" ? "5–10% роялти от ВСЕХ вторичных перепродаж" : "5-10% lifetime secondary NFT royalties"}</p>
+                <p className="hover:text-white transition-colors">3. {lang === "ru" ? "Глобальная аудитория коллекционеров" : "Global international collector audience"}</p>
+                <p className="hover:text-white transition-colors">4. {lang === "ru" ? "Сохранение ценности физического холста" : "Preservation of physical craftsmanship"}</p>
               </div>
             </div>
 
@@ -526,11 +681,13 @@ export default function AuctionPage() {
                   Proof of Concept / Доказанный Кейс
                 </span>
                 <h3 className="text-2xl font-bold font-montserrat uppercase tracking-tight">
-                  Успех Botto DAO ($4M+ Продаж)
+                  Botto DAO ($4M+ Sales)
                 </h3>
               </div>
               <p className="text-secondary text-sm font-light leading-relaxed">
-                Децентрализованный проект Botto доказал эффективность арт-токеномики: с 2021 года было продано более 140 оригинальных работ на аукционах SuperRare на общую сумму свыше $4,000,000+, а рекордные картины уходили по $300,000 за штуку.
+                {lang === "ru"
+                  ? "Децентрализованный проект Botto доказал эффективность арт-токеномики: с 2021 года было продано более 140 оригинальных работ на аукционах SuperRare на общую сумму свыше $4,000,000+, а рекордные картины уходили по $300,000 за штуку."
+                  : "Botto proved art tokenomics efficacy: over 140 pieces sold on SuperRare generating $4,000,000+ in sales, with top works reaching $300,000 per piece."}
               </p>
 
               <div className="pt-4 flex flex-col sm:flex-row gap-4 text-xs font-mono uppercase tracking-widest">
@@ -540,7 +697,7 @@ export default function AuctionPage() {
                   rel="noreferrer"
                   className="text-accent hover:underline"
                 >
-                  Официальный сайт Botto →
+                  Botto Official Site →
                 </a>
                 <a
                   href="https://superrare.com/botto"
@@ -548,7 +705,7 @@ export default function AuctionPage() {
                   rel="noreferrer"
                   className="text-secondary hover:text-white"
                 >
-                  Галерея SuperRare →
+                  SuperRare Gallery →
                 </a>
               </div>
             </div>
@@ -561,29 +718,33 @@ export default function AuctionPage() {
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] text-accent uppercase font-mono block">
-              06 / Logistics & Security / Логистика
+              {t.logisticsSub}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-              Доставка по миру и Vault-Хранение
+              {t.logisticsTitle}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="p-8 border border-white/10 space-y-4 bg-black">
               <h3 className="text-lg font-bold font-montserrat uppercase tracking-tight text-accent">
-                [А] Отправка физических картин из РФ
+                [A] {lang === "ru" ? "Отправка физических картин из РФ" : "Global Shipping from Russia"}
               </h3>
               <p className="text-secondary text-sm font-light leading-relaxed">
-                Работы современных авторов (до 50 лет) оформляются экспертом Минкульта РФ за 2-3 дня. Доставка осуществляется компаниями EMS, СДЭК Арт и Art Mail в жестких климатических боксах в 180+ стран мира с полным страхованием.
+                {lang === "ru"
+                  ? "Работы современных авторов (до 50 лет) оформляются экспертом Минкульта РФ за 2-3 дня. Доставка осуществляется компаниями EMS, СДЭК Арт и Art Mail в жестких климатических боксах в 180+ стран мира с полным страхованием."
+                  : "Contemporary artwork export permits processed within 2-3 days via Ministry of Culture experts. Delivered to 180+ countries via EMS, CDEK Art, and Art Mail with wooden crate packaging and full insurance."}
               </p>
             </div>
 
             <div className="p-8 border border-white/10 space-y-4 bg-black">
               <h3 className="text-lg font-bold font-montserrat uppercase tracking-tight text-accent">
-                [Б] Vault & Claim (Депозитарная Гарантия)
+                [B] Vault & Claim ({lang === "ru" ? "Депозитарная Гарантия" : "Vault Depository"})
               </h3>
               <p className="text-secondary text-sm font-light leading-relaxed">
-                Чтобы не пересылать картину при каждой перепродаже NFT, произведение хранится в безопасном хранилище проекта. Инвестор может свободно торговать NFT 24/7 или в любой момент заказать доставку через кнопку Redeem Physical.
+                {lang === "ru"
+                  ? "Чтобы не пересылать картину при каждой перепродаже NFT, произведение хранится в безопасном хранилище проекта. Инвестор может свободно торговать NFT 24/7 или в любой момент заказать доставку через кнопку Redeem Physical."
+                  : "Physical artwork remains securely stored in studio vaults while the NFT trades 24/7 globally. Collectors can trigger Physical Redemption anytime with full delivery guarantee."}
               </p>
             </div>
           </div>
@@ -594,24 +755,34 @@ export default function AuctionPage() {
       <section id="first-auction" className="py-32 px-6 md:px-12 bg-black">
         <div className="max-w-4xl mx-auto text-center space-y-8 border border-accent/40 p-12 md:p-20 bg-white/[0.01]">
           <span className="text-[10px] font-mono tracking-[0.5em] text-accent uppercase block">
-            Upcoming Auction #01
+            {t.teaserSub}
           </span>
           <h2 className="text-3xl md:text-5xl font-bold font-montserrat uppercase tracking-tighter">
-            Первый Phygital Арт-Аукцион
+            {t.teaserTitle}
           </h2>
           <TypewriterText
-            text="Индустриальный фарфор, металл и сжигание токенов на Solana..."
+            text={lang === "ru" ? "Индустриальный фарфор, металл и сжигание токенов на Solana..." : "Industrial porcelain, steel, and token burning on Solana..."}
             className="text-base md:text-xl text-accent font-mono"
             speed={40}
           />
           <p className="text-secondary text-sm max-w-lg mx-auto font-light">
-            Физическая арт-скульптура + 1-of-1 NFT Паспорт. Победная ставка сжигает монеты $KOMMUNARKA в прямом эфире.
+            {lang === "ru"
+              ? "Физическая арт-скульптура + 1-of-1 NFT Паспорт. Победная ставка сжигает монеты $KOMMUNARKA в прямом эфире."
+              : "Physical art sculpture + 1-of-1 NFT Passport. Winning bids burn $KOMMUNARKA tokens live on-chain."}
           </p>
 
-          <div className="pt-6">
+          <div className="pt-6 flex flex-wrap justify-center gap-4">
             <button className="px-10 py-5 bg-accent text-black font-bold uppercase tracking-[0.2em] font-mono text-xs hover:bg-white transition-colors">
-              Скоро Открытие Торгов
+              {t.teaserBtn}
             </button>
+            <a
+              href="/WHITEPAPER.md"
+              target="_blank"
+              rel="noreferrer"
+              className="px-8 py-5 border border-white/20 text-white font-mono uppercase tracking-[0.2em] text-xs hover:border-accent hover:text-accent transition-colors"
+            >
+              {t.whitepaperBtn}
+            </a>
           </div>
         </div>
       </section>
@@ -643,11 +814,10 @@ export default function AuctionPage() {
               <p>Burn Module 0.75</p>
             </div>
             <div className="space-y-4">
-              <span className="text-white block">Navigation</span>
+              <span className="text-white block">Documentation</span>
+              <p><a href="/WHITEPAPER.md" target="_blank" rel="noreferrer" className="text-accent font-bold">Whitepaper (EN)</a></p>
+              <p><a href="/KOMMUNARKA_STRATEGY.md" target="_blank" rel="noreferrer" className="hover:text-white">Strategy (RU)</a></p>
               <p><a href="/#archive">Артефакты</a></p>
-              <p><a href="/exhibitions">Выставки</a></p>
-              <p><a href="/about">Студия</a></p>
-              <p><a href="/KOMMUNARKA_STRATEGY.md" target="_blank" rel="noreferrer" className="text-accent font-bold">Белая Книга (MD)</a></p>
             </div>
             <div className="space-y-4">
               <span className="text-white block">Analytics</span>
