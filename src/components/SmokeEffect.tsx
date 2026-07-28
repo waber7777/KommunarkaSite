@@ -22,9 +22,9 @@ export default function SmokeEffect() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Dynamic Smoke Puffs + Floating Ember Sparks
-    const smokePuffCount = 30;
-    const emberCount = 35;
+    // Dynamic Smoke Puffs + Slow Floating Ash Embers
+    const smokePuffCount = 32;
+    const emberCount = 40;
 
     interface SmokePuff {
       x: number;
@@ -62,15 +62,15 @@ export default function SmokeEffect() {
       smokePuffs.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        baseRadius: Math.random() * 220 + 180,
-        speedX: (Math.random() - 0.4) * 0.8, // Active drift
-        speedY: -Math.random() * 0.5 - 0.2, // Upward floating motion
-        waveFreq: Math.random() * 0.02 + 0.005,
-        waveAmp: Math.random() * 2.5 + 1.0,
-        alpha: Math.random() * 0.12 + 0.05,
+        baseRadius: Math.random() * 240 + 180,
+        speedX: (Math.random() - 0.4) * 0.3, // Slower horizontal drift
+        speedY: -Math.random() * 0.18 - 0.05, // Slower upward mist movement
+        waveFreq: Math.random() * 0.015 + 0.003,
+        waveAmp: Math.random() * 2.0 + 0.5,
+        alpha: Math.random() * 0.12 + 0.04,
         color: smokeColors[Math.floor(Math.random() * smokeColors.length)],
         angle: Math.random() * Math.PI * 2,
-        spinSpeed: (Math.random() - 0.5) * 0.005
+        spinSpeed: (Math.random() - 0.5) * 0.002
       });
     }
 
@@ -79,16 +79,16 @@ export default function SmokeEffect() {
       embers.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 2.5 + 1.0,
-        speedY: -Math.random() * 1.2 - 0.3,
-        speedX: (Math.random() - 0.5) * 0.6,
-        alpha: Math.random() * 0.8 + 0.2,
-        pulseSpeed: Math.random() * 0.05 + 0.02
+        size: Math.random() * 2.2 + 0.8,
+        speedY: -Math.random() * 0.35 - 0.08, // Slower ash lift
+        speedX: (Math.random() - 0.5) * 0.25,
+        alpha: Math.random() * 0.7 + 0.2,
+        pulseSpeed: Math.random() * 0.03 + 0.01
       });
     }
 
     const render = () => {
-      time += 0.015;
+      time += 0.01;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Render Floating Smoke Clouds
@@ -105,8 +105,8 @@ export default function SmokeEffect() {
         if (p.x < -p.baseRadius) p.x = canvas.width + p.baseRadius;
         if (p.x > canvas.width + p.baseRadius) p.x = -p.baseRadius;
 
-        const currentRadius = p.baseRadius + Math.sin(time * 2 + p.x * 0.01) * 35;
-        const currentAlpha = p.alpha + Math.sin(time * 1.5 + p.y * 0.01) * 0.03;
+        const currentRadius = p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 25;
+        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.02;
 
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -114,7 +114,7 @@ export default function SmokeEffect() {
 
         const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, currentRadius);
         gradient.addColorStop(0, `${p.color}${Math.max(0, currentAlpha)})`);
-        gradient.addColorStop(0.5, `${p.color}${Math.max(0, currentAlpha * 0.4)})`);
+        gradient.addColorStop(0.5, `${p.color}${Math.max(0, currentAlpha * 0.35)})`);
         gradient.addColorStop(1, `${p.color}0)`);
 
         ctx.fillStyle = gradient;
@@ -124,17 +124,17 @@ export default function SmokeEffect() {
         ctx.restore();
       });
 
-      // Render Floating Industrial Sparks / Embers
+      // Render Slow Floating Embers & Sparks
       embers.forEach((e) => {
         e.y += e.speedY;
-        e.x += e.speedX + Math.sin(time * 3 + e.y * 0.05) * 0.5;
+        e.x += e.speedX + Math.sin(time * 2 + e.y * 0.02) * 0.3;
 
         if (e.y < -10) {
           e.y = canvas.height + 10;
           e.x = Math.random() * canvas.width;
         }
 
-        const currentAlpha = e.alpha * (0.6 + 0.4 * Math.sin(time * 5 + e.x));
+        const currentAlpha = e.alpha * (0.6 + 0.4 * Math.sin(time * 3 + e.x));
 
         ctx.fillStyle = `rgba(255, 183, 3, ${Math.max(0, currentAlpha)})`;
         ctx.beginPath();
@@ -155,10 +155,9 @@ export default function SmokeEffect() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-15 overflow-hidden">
-      {/* Dynamic Animated Canvas Smoke */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full opacity-90 mix-blend-screen"
+        className="w-full h-full opacity-80 mix-blend-screen"
       />
     </div>
   );

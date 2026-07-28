@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation";
 import TypewriterText from "@/components/TypewriterText";
 import Counter from "@/components/Counter";
 import SmokeEffect from "@/components/SmokeEffect";
+import AmbientAudio from "@/components/AmbientAudio";
 
 export default function AuctionPage() {
   // Language State: 'ru' | 'en'
@@ -149,24 +150,27 @@ export default function AuctionPage() {
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
-        {/* Language Switcher Bar */}
-        <div className="absolute top-24 right-6 md:right-12 z-30 flex items-center gap-2 border border-white/10 p-1 bg-black/60 backdrop-blur-md text-xs font-mono">
-          <button
-            onClick={() => setLang("ru")}
-            className={`px-3 py-1 transition-all ${
-              lang === "ru" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
-            }`}
-          >
-            RU
-          </button>
-          <button
-            onClick={() => setLang("en")}
-            className={`px-3 py-1 transition-all ${
-              lang === "en" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
-            }`}
-          >
-            EN
-          </button>
+        {/* Control Bar (Language & Sound) */}
+        <div className="absolute top-24 right-6 md:right-12 z-30 flex items-center gap-3">
+          <AmbientAudio lang={lang} />
+          <div className="flex items-center gap-1 border border-white/10 p-1 bg-black/60 backdrop-blur-md text-xs font-mono">
+            <button
+              onClick={() => setLang("ru")}
+              className={`px-3 py-1 transition-all ${
+                lang === "ru" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
+              }`}
+            >
+              RU
+            </button>
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1 transition-all ${
+                lang === "en" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
+              }`}
+            >
+              EN
+            </button>
+          </div>
         </div>
 
         {/* Ambient Glow */}
