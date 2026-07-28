@@ -207,19 +207,21 @@ function ArtworkCard({ art, index, onClick }: { art: Artwork; index: number; onC
                 <div className="absolute inset-0 flex items-center justify-center text-secondary/5 uppercase tracking-[1em] text-[10px] font-mono select-none pointer-events-none">
                     {art.id}
                 </div>
-                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-md px-4 py-1.5 text-[9px] font-mono text-white/90 uppercase tracking-widest border border-white/10 shadow-lg">
-                    {art.collection}
-                </div>
             </div>
 
             <div className="mt-8 space-y-4">
-                <div className="flex justify-between items-baseline gap-4 pr-4">
-                    <h3 className="text-xl md:text-2xl font-bold font-montserrat uppercase tracking-tighter">
-                        {art.title}
-                    </h3>
-                    <span className="text-[10px] font-mono text-secondary/60 uppercase whitespace-nowrap">
-                        {art.year}
+                <div className="space-y-1">
+                    <span className="text-[9px] font-mono text-accent uppercase tracking-[0.25em] block">
+                        {art.collection}
                     </span>
+                    <div className="flex justify-between items-baseline gap-4 pr-4">
+                        <h3 className="text-xl md:text-2xl font-bold font-montserrat uppercase tracking-tighter">
+                            {art.title}
+                        </h3>
+                        <span className="text-[10px] font-mono text-secondary/60 uppercase whitespace-nowrap">
+                            {art.year}
+                        </span>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 text-[10px] font-mono text-secondary uppercase tracking-widest border-t border-white/5 pt-4">

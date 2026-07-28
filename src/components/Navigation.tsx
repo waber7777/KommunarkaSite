@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 const navLinks = [
     { name: "Артефакты", href: "/#archive" },
     { name: "Выставки", href: "/exhibitions" },
+    { name: "Аукцион", href: "/auction" },
     { name: "Студия", href: "/about" },
     { name: "Контакты", href: "/contacts" },
 ];
