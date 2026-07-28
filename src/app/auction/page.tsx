@@ -690,14 +690,14 @@ export default function AuctionPage() {
                   : "Botto proved art tokenomics efficacy: over 140 pieces sold on SuperRare generating $4,000,000+ in sales, with top works reaching $300,000 per piece."}
               </p>
 
-              <div className="pt-4 flex flex-col sm:flex-row gap-4 text-xs font-mono uppercase tracking-widest">
+              <div className="pt-4 flex flex-wrap gap-4 text-xs font-mono uppercase tracking-widest">
                 <a
                   href="https://botto.com"
                   target="_blank"
                   rel="noreferrer"
                   className="text-accent hover:underline"
                 >
-                  Botto Official Site →
+                  Botto Site →
                 </a>
                 <a
                   href="https://superrare.com/botto"
@@ -705,7 +705,15 @@ export default function AuctionPage() {
                   rel="noreferrer"
                   className="text-secondary hover:text-white"
                 >
-                  SuperRare Gallery →
+                  SuperRare →
+                </a>
+                <a
+                  href="https://dexscreener.com/ethereum/0x9dfad1b7102d4a994df7eed759f2fa88301ebca5"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  DexScreener ($BOTTO) →
                 </a>
               </div>
             </div>
