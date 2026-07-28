@@ -21,9 +21,9 @@ export default function AuctionPage() {
   // Lot #01 Photo Gallery
   const [lotImgIndex, setLotImgIndex] = useState<number>(0);
   const lotImages = [
-    "/assets/artworks/zabor-detail-2.jpg",
     "/assets/artworks/zabor-1.jpg",
-    "/assets/artworks/zabor-detail-1.jpg"
+    "/assets/artworks/zabor-detail-1.jpg",
+    "/assets/artworks/zabor-detail-2.jpg"
   ];
 
   const TOTAL_SUPPLY = 1000000000; // 1,000,000,000 $KOMMUNARKA tokens
@@ -794,9 +794,6 @@ export default function AuctionPage() {
                   alt="Заборы. Лист №1"
                   className="w-full h-full object-contain filter contrast-110 group-hover:scale-105 transition-all duration-700"
                 />
-                <div className="absolute top-4 left-4 bg-accent text-black font-mono font-bold text-[10px] uppercase px-3 py-1 tracking-widest">
-                  LOT #01 • 1-OF-1 PHYGITAL
-                </div>
               </div>
 
               {/* Thumbnails */}
@@ -806,7 +803,7 @@ export default function AuctionPage() {
                     key={idx}
                     onClick={() => setLotImgIndex(idx)}
                     className={`border overflow-hidden aspect-square bg-zinc-950 p-1 transition-all ${
-                      lotImgIndex === idx ? "border-accent ring-1 ring-accent" : "border-white/10 opacity-60 hover:opacity-100"
+                      lotImgIndex === idx ? "border-accent ring-1 ring-accent opacity-100" : "border-white/10 opacity-60 hover:opacity-100"
                     }`}
                   >
                     <img src={img} alt={`Вид ${idx + 1}`} className="w-full h-full object-cover" />
@@ -817,14 +814,19 @@ export default function AuctionPage() {
 
             {/* Artwork Details & Instagram Link */}
             <div className="space-y-6">
-              <div className="space-y-2 border-b border-white/10 pb-4">
-                <span className="text-xs font-mono text-secondary uppercase tracking-widest">
-                  {lang === "ru" ? "Первый Арт-Лот" : "Featured Auction Item"}
-                </span>
-                <h3 className="text-2xl md:text-3xl font-bold font-montserrat uppercase text-white">
-                  {lang === "ru" ? "Заборы. Лист №1" : "Fences. Sheet No. 1"}
-                </h3>
-                <span className="text-xs font-mono text-accent block">2026 • Moscow Studio</span>
+              <div className="space-y-3 border-b border-white/10 pb-4">
+                <div className="inline-flex items-center gap-2 bg-accent text-black font-mono font-bold text-[10px] uppercase px-3 py-1 tracking-widest">
+                  LOT #01 • 1-OF-1 PHYGITAL
+                </div>
+                <div>
+                  <span className="text-xs font-mono text-secondary uppercase tracking-widest block">
+                    {lang === "ru" ? "Первый Арт-Лот" : "Featured Auction Item"}
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-bold font-montserrat uppercase text-white mt-1">
+                    {lang === "ru" ? "Заборы. Лист №1" : "Fences. Sheet No. 1"}
+                  </h3>
+                  <span className="text-xs font-mono text-accent block mt-1">2026 • Moscow Studio</span>
+                </div>
               </div>
 
               <div className="space-y-3 text-xs font-mono text-secondary">
