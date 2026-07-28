@@ -779,18 +779,10 @@ export default function AuctionPage() {
               : "Physical art sculpture + 1-of-1 NFT Passport. Winning bids burn $KOMMUNARKA tokens live on-chain."}
           </p>
 
-          <div className="pt-6 flex flex-wrap justify-center gap-4">
+          <div className="pt-6 flex justify-center">
             <button className="px-10 py-5 bg-accent text-black font-bold uppercase tracking-[0.2em] font-mono text-xs hover:bg-white transition-colors">
               {t.teaserBtn}
             </button>
-            <a
-              href="/WHITEPAPER.md"
-              target="_blank"
-              rel="noreferrer"
-              className="px-8 py-5 border border-white/20 text-white font-mono uppercase tracking-[0.2em] text-xs hover:border-accent hover:text-accent transition-colors"
-            >
-              {t.whitepaperBtn}
-            </a>
           </div>
         </div>
       </section>
