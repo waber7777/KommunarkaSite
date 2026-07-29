@@ -23,12 +23,12 @@ export default function SmokeEffect() {
     window.addEventListener("resize", resizeCanvas);
 
     // 1. Industrial Smoke Clouds Parameters
-    const smokePuffCount = 28;
+    const smokePuffCount = 30;
     const smokeColors = [
-      "rgba(255, 160, 20, ",  // Warm ember amber mist
-      "rgba(110, 115, 125, ", // Industrial smoke gray
-      "rgba(60, 60, 70, ",    // Deep charcoal ash
-      "rgba(190, 100, 30, "   // Copper rust haze
+      "rgba(255, 170, 30, ",  // Warm ember amber mist
+      "rgba(120, 125, 135, ", // Industrial smoke gray
+      "rgba(65, 65, 75, ",    // Deep charcoal ash
+      "rgba(210, 110, 35, "   // Copper rust haze
     ];
 
     interface SmokePuff {
@@ -62,14 +62,13 @@ export default function SmokeEffect() {
       });
     }
 
-    // 2. Realistic Fire Embers Particle Physics System
-    const emberCount = 55;
+    // 2. High-Contrast Glowing Fire Embers System
+    const emberCount = 65;
 
     interface RealisticEmber {
       x: number;
       y: number;
       size: number;
-      maxSize: number;
       speedY: number;
       speedX: number;
       alpha: number;
@@ -78,25 +77,21 @@ export default function SmokeEffect() {
       wobbleAmp: number;
       life: number;
       maxLife: number;
-      sparkleSpeed: number;
     }
 
     const createEmber = (initialY?: number): RealisticEmber => {
-      const maxLife = Math.random() * 300 + 200;
       return {
         x: Math.random() * canvas.width,
-        y: initialY !== undefined ? initialY : canvas.height + Math.random() * 100,
-        size: Math.random() * 2.5 + 1.2,
-        maxSize: Math.random() * 3.5 + 1.5,
-        speedY: -Math.random() * 0.8 - 0.3, // Upward fire drift
-        speedX: (Math.random() - 0.5) * 0.4,
+        y: initialY !== undefined ? initialY : canvas.height + Math.random() * 60,
+        size: Math.random() * 3.5 + 1.8, // Larger, vivid sparks
+        speedY: -Math.random() * 1.2 - 0.4, // Active upward lift
+        speedX: (Math.random() - 0.5) * 0.5,
         alpha: 0,
-        maxAlpha: Math.random() * 0.7 + 0.3,
+        maxAlpha: Math.random() * 0.85 + 0.35,
         wobbleFreq: Math.random() * 0.03 + 0.01,
-        wobbleAmp: Math.random() * 1.8 + 0.5,
+        wobbleAmp: Math.random() * 2.2 + 0.8,
         life: 0,
-        maxLife: maxLife,
-        sparkleSpeed: Math.random() * 0.08 + 0.03
+        maxLife: Math.random() * 280 + 180
       };
     };
 
@@ -106,10 +101,10 @@ export default function SmokeEffect() {
     }
 
     const render = () => {
-      time += 0.015;
+      time += 0.018;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // --- PASS 1: Render Smoke Clouds (Normal Composite) ---
+      // --- PASS 1: Render Background Smoke Clouds ---
       ctx.globalCompositeOperation = "source-over";
 
       smokePuffs.forEach((p) => {
@@ -121,8 +116,6 @@ export default function SmokeEffect() {
           p.y = canvas.height + p.baseRadius;
           p.x = Math.random() * canvas.width;
         }
-        if (p.x < -p.baseRadius) p.x = canvas.width + p.baseRadius;
-        if (p.x > canvas.width + p.baseRadius) p.x = -p.baseRadius;
 
         const currentRadius = p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 25;
         const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.02;
@@ -143,51 +136,47 @@ export default function SmokeEffect() {
         ctx.restore();
       });
 
-      // --- PASS 2: Render Realistic Glowing Fire Embers (Additive Glowing Blending) ---
+      // --- PASS 2: Vivid Fire Embers (Additive Blend Mode) ---
       ctx.globalCompositeOperation = "lighter";
 
       embers.forEach((e, idx) => {
         e.life += 1;
         e.y += e.speedY;
-        e.x += e.speedX + Math.sin(time * 2 + e.y * 0.02) * e.wobbleAmp;
+        e.x += e.speedX + Math.sin(time * 2.5 + e.y * 0.02) * e.wobbleAmp;
 
-        // Fade in at start, fade out at end of life
         const lifeRatio = e.life / e.maxLife;
-        if (lifeRatio < 0.2) {
-          e.alpha = (lifeRatio / 0.2) * e.maxAlpha;
-        } else if (lifeRatio > 0.7) {
-          e.alpha = (1 - (lifeRatio - 0.7) / 0.3) * e.maxAlpha;
+        if (lifeRatio < 0.15) {
+          e.alpha = (lifeRatio / 0.15) * e.maxAlpha;
+        } else if (lifeRatio > 0.75) {
+          e.alpha = (1 - (lifeRatio - 0.75) / 0.25) * e.maxAlpha;
         } else {
           e.alpha = e.maxAlpha;
         }
 
-        // Respawn expired embers
         if (e.life >= e.maxLife || e.y < -20) {
           embers[idx] = createEmber();
           return;
         }
 
-        // Fire Ember Color Gradient: Hot White Center -> Intense Golden Orange Outer Halo
-        const glowRadius = e.size * 3.5;
+        // Intense Fire Gradient: Bright Pure White Core -> Fiery Amber/Orange Outer Glow
+        const glowRadius = e.size * 4.0;
         const emberGradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
+        const currentAlpha = Math.max(0, e.alpha * (0.8 + 0.2 * Math.sin(time * 8 + e.x)));
         
-        // Temperature shifting: white-hot -> gold -> fiery red
-        const currentAlpha = Math.max(0, e.alpha * (0.8 + 0.2 * Math.sin(time * 10 + e.x)));
-        
-        emberGradient.addColorStop(0, `rgba(255, 255, 240, ${currentAlpha})`);
-        emberGradient.addColorStop(0.25, `rgba(255, 180, 20, ${currentAlpha * 0.9})`);
-        emberGradient.addColorStop(0.6, `rgba(255, 75, 0, ${currentAlpha * 0.5})`);
-        emberGradient.addColorStop(1, `rgba(200, 30, 0, 0)`);
+        emberGradient.addColorStop(0, `rgba(255, 255, 255, ${currentAlpha})`);
+        emberGradient.addColorStop(0.3, `rgba(255, 190, 30, ${currentAlpha * 0.9})`);
+        emberGradient.addColorStop(0.7, `rgba(255, 60, 0, ${currentAlpha * 0.5})`);
+        emberGradient.addColorStop(1, `rgba(200, 20, 0, 0)`);
 
         ctx.fillStyle = emberGradient;
         ctx.beginPath();
         ctx.arc(e.x, e.y, glowRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Bright Core Spark
-        ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha * 0.95})`;
+        // Hot Inner Spark Core
+        ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha * 0.98})`;
         ctx.beginPath();
-        ctx.arc(e.x, e.y, e.size * 0.6, 0, Math.PI * 2);
+        ctx.arc(e.x, e.y, e.size * 0.8, 0, Math.PI * 2);
         ctx.fill();
       });
 
@@ -206,7 +195,7 @@ export default function SmokeEffect() {
     <div className="fixed inset-0 pointer-events-none z-15 overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="w-full h-full opacity-90 mix-blend-screen"
+        className="w-full h-full opacity-95 mix-blend-screen"
       />
     </div>
   );
