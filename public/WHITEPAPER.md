@@ -72,7 +72,7 @@ Deep-dive research across crypto communities (`r/CryptoCurrency`, `r/solana`, `r
 3. **Market Buyback Pressure:** 50% of proceeds execute direct Market Buy orders on DEX (Raydium), creating green candles before burning the tokens.
 4. **VIP Gated Access:** Token holders receive early access to physical merchandise drops and whitelist auction spots.
 
-*Resources:* [botto.com](https://www.botto.com) | [superrare.com/botto](https://superrare.com/botto) | [DexScreener $BOTTO](https://dexscreener.com/ethereum/0x9dfad1b7102d4a994df7eed759f2fa88301ebca5)
+*Resources:* [botto.com](https://www.botto.com) | [superrare.com/botto](https://superrare.com/botto) | [DexScreener $BOTTO](https://dexscreener.com/ethereum/0x9dfad1b7102d46b1b197b90095b5c4e9f5845bba)
 
 ---
 

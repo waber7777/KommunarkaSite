@@ -72,7 +72,7 @@
 3. **Прямой Выкуп из Стакана DEX (Market Buyback):** 50% денег от продажи картины выкупает токены $KOMMUNARKA прямо на бирже Raydium, подталкивая цену вверх (зелёные свечи) и сжигая их.
 4. **VIP-Доступ к Арт-Дропам:** Токен дает доступ к закрытым распродажам физического мерча и приоритетному праву покупки картин.
 
-*Официальные ресурсы Botto DAO:* [botto.com](https://www.botto.com) | [superrare.com/botto](https://superrare.com/botto) | [DexScreener $BOTTO](https://dexscreener.com/ethereum/0x9dfad1b7102d4a994df7eed759f2fa88301ebca5)
+*Официальные ресурсы Botto DAO:* [botto.com](https://www.botto.com) | [superrare.com/botto](https://superrare.com/botto) | [DexScreener $BOTTO](https://dexscreener.com/ethereum/0x9dfad1b7102d46b1b197b90095b5c4e9f5845bba)
 
 ---
 

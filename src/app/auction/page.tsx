@@ -718,7 +718,7 @@ export default function AuctionPage() {
                   SuperRare →
                 </a>
                 <a
-                  href="https://dexscreener.com/ethereum/0x9dfad1b7102d4a994df7eed759f2fa88301ebca5"
+                  href="https://dexscreener.com/ethereum/0x9dfad1b7102d46b1b197b90095b5c4e9f5845bba"
                   target="_blank"
                   rel="noreferrer"
                   className="text-accent hover:underline"
