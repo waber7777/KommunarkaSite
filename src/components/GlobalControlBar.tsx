@@ -22,7 +22,10 @@ export default function GlobalControlBar({
   const [currentLang, setCurrentLang] = useState<"ru" | "en">(lang);
 
   useEffect(() => {
-    setCurrentLang(lang);
+    if (typeof window !== "undefined") {
+      const savedLang = (localStorage.getItem("kommunarka_lang") as "ru" | "en") || lang;
+      setCurrentLang(savedLang);
+    }
   }, [lang]);
 
   useEffect(() => {
@@ -85,6 +88,11 @@ export default function GlobalControlBar({
 
   const handleLangChange = (newLang: "ru" | "en") => {
     setCurrentLang(newLang);
+    localStorage.setItem("kommunarka_lang", newLang);
+    
+    // Broadcast language change to page components
+    window.dispatchEvent(new CustomEvent("kommunarka_lang_changed", { detail: newLang }));
+
     if (setLang) {
       setLang(newLang);
     }

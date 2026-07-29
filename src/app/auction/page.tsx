@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import TypewriterText from "@/components/TypewriterText";
@@ -11,6 +11,24 @@ import GlobalControlBar from "@/components/GlobalControlBar";
 export default function AuctionPage() {
   // Language State: 'ru' | 'en'
   const [lang, setLang] = useState<"ru" | "en">("ru");
+
+  useEffect(() => {
+    // Read saved language preference
+    const savedLang = (localStorage.getItem("kommunarka_lang") as "ru" | "en") || "ru";
+    setLang(savedLang);
+
+    const handleLangEvent = (e: Event) => {
+      const customEvt = e as CustomEvent<"ru" | "en">;
+      if (customEvt.detail) {
+        setLang(customEvt.detail);
+      }
+    };
+
+    window.addEventListener("kommunarka_lang_changed", handleLangEvent);
+    return () => {
+      window.removeEventListener("kommunarka_lang_changed", handleLangEvent);
+    };
+  }, []);
 
   // Calculator mode: 'burn-bidding' or 'botto-buyback'
   const [calcMode, setCalcMode] = useState<"burn-bidding" | "botto-buyback">("burn-bidding");
