@@ -3,13 +3,17 @@
 import { useEffect, useRef } from "react";
 
 export default function SmokeEffect() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const smokeCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const sparkCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const smokeCanvas = smokeCanvasRef.current;
+    const sparkCanvas = sparkCanvasRef.current;
+    if (!smokeCanvas || !sparkCanvas) return;
+
+    const smokeCtx = smokeCanvas.getContext("2d");
+    const sparkCtx = sparkCanvas.getContext("2d");
+    if (!smokeCtx || !sparkCtx) return;
 
     let animationFrameId: number;
     let time = 0;
@@ -17,17 +21,17 @@ export default function SmokeEffect() {
     const isMobile = window.innerWidth < 768;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      smokeCanvas.width = window.innerWidth;
+      smokeCanvas.height = window.innerHeight;
+      sparkCanvas.width = window.innerWidth;
+      sparkCanvas.height = window.innerHeight;
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // 1. 2x Fewer & 2x Larger Vibrant Orange-Golden Clouds (4x Slower Dissipation)
-    const smokePuffCount = isMobile ? 6 : 12; // 2x fewer clouds
-    
-    // Rich Orange & Warm Golden Palette
+    // 1. Vibrant Orange-Golden Clouds (Rendered BEHIND artwork cards on z-0)
+    const smokePuffCount = isMobile ? 6 : 12;
     const smokeColors = [
       "rgba(255, 140, 20, ",   // Rich warm orange
       "rgba(255, 175, 40, ",   // Luminous golden amber
@@ -52,12 +56,11 @@ export default function SmokeEffect() {
     const smokePuffs: SmokePuff[] = [];
     for (let i = 0; i < smokePuffCount; i++) {
       smokePuffs.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        // 2x Larger cloud radius for grand majestic volume
+        x: Math.random() * smokeCanvas.width,
+        y: Math.random() * smokeCanvas.height,
         baseRadius: (Math.random() * 260 + 200) * (isMobile ? 0.75 : 1.0),
-        speedX: (Math.random() - 0.4) * 0.06, // Ultra-slow drift
-        speedY: -Math.random() * 0.03 - 0.008, // 4x Slower upward motion & dissipation
+        speedX: (Math.random() - 0.4) * 0.06,
+        speedY: -Math.random() * 0.03 - 0.008,
         waveFreq: Math.random() * 0.004 + 0.001,
         waveAmp: Math.random() * 1.2 + 0.3,
         alpha: Math.random() * 0.12 + 0.05,
@@ -67,7 +70,7 @@ export default function SmokeEffect() {
       });
     }
 
-    // 2. Soft Luminous Natural Embers
+    // 2. Soft Natural Embers
     const softEmberCount = isMobile ? 16 : 32;
     const emberSizeScale = isMobile ? 0.5 : 1.0;
 
@@ -83,8 +86,8 @@ export default function SmokeEffect() {
     const softEmbers: SoftEmber[] = [];
     for (let i = 0; i < softEmberCount; i++) {
       softEmbers.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * sparkCanvas.width,
+        y: Math.random() * sparkCanvas.height,
         size: (Math.random() * 1.6 + 0.6) * emberSizeScale,
         speedY: -Math.random() * 0.2 - 0.05,
         speedX: (Math.random() - 0.5) * 0.15,
@@ -92,7 +95,7 @@ export default function SmokeEffect() {
       });
     }
 
-    // 3. Bright Micro Golden Sparks
+    // 3. Bright Micro Golden Sparks (Rendered OVER cards on z-25)
     const brightEmberCount = isMobile ? 8 : 14;
     interface BrightEmber {
       x: number;
@@ -108,8 +111,8 @@ export default function SmokeEffect() {
 
     const createBrightEmber = (initialY?: number): BrightEmber => {
       return {
-        x: Math.random() * canvas.width,
-        y: initialY !== undefined ? initialY : canvas.height + Math.random() * 40,
+        x: Math.random() * sparkCanvas.width,
+        y: initialY !== undefined ? initialY : sparkCanvas.height + Math.random() * 40,
         size: (Math.random() * 1.2 + 0.5) * emberSizeScale,
         speedY: -Math.random() * 0.4 - 0.15,
         speedX: (Math.random() - 0.5) * 0.2,
@@ -122,18 +125,19 @@ export default function SmokeEffect() {
 
     const brightEmbers: BrightEmber[] = [];
     for (let i = 0; i < brightEmberCount; i++) {
-      brightEmbers.push(createBrightEmber(Math.random() * canvas.height));
+      brightEmbers.push(createBrightEmber(Math.random() * sparkCanvas.height));
     }
 
     const render = () => {
-      time += 0.008; // Slower time step for ultra-smooth majestic animation
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 0.008;
+      smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+      sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
 
       const beatCycle = (time * 6.28) % 3.14;
       const bpmPulse = Math.pow(Math.sin(beatCycle), 6) * 0.15;
 
-      // --- PASS 1: Render 2x Larger, 4x Slower Orange-Golden Clouds ---
-      ctx.globalCompositeOperation = "source-over";
+      // --- CANVAS 1 (z-0): BACKGROUND SMOKE CLOUDS (Strictly BEHIND all artwork cards) ---
+      smokeCtx.globalCompositeOperation = "source-over";
 
       smokePuffs.forEach((p) => {
         p.x += p.speedX + Math.sin(time * p.waveFreq) * p.waveAmp;
@@ -141,50 +145,51 @@ export default function SmokeEffect() {
         p.angle += p.spinSpeed;
 
         if (p.y < -p.baseRadius) {
-          p.y = canvas.height + p.baseRadius;
-          p.x = Math.random() * canvas.width;
+          p.y = smokeCanvas.height + p.baseRadius;
+          p.x = Math.random() * smokeCanvas.width;
         }
 
         const currentRadius = p.baseRadius + Math.sin(time * 0.6 + p.x * 0.003) * 15 + bpmPulse * 8;
         const currentAlpha = p.alpha + Math.sin(time * 0.5 + p.y * 0.003) * 0.01;
 
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.angle);
+        smokeCtx.save();
+        smokeCtx.translate(p.x, p.y);
+        smokeCtx.rotate(p.angle);
 
-        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, currentRadius);
+        const gradient = smokeCtx.createRadialGradient(0, 0, 0, 0, 0, currentRadius);
         gradient.addColorStop(0, `${p.color}${Math.max(0, currentAlpha * 1.3)})`);
         gradient.addColorStop(0.4, `${p.color}${Math.max(0, currentAlpha * 0.7)})`);
         gradient.addColorStop(0.8, `${p.color}${Math.max(0, currentAlpha * 0.2)})`);
         gradient.addColorStop(1, `${p.color}0)`);
 
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        smokeCtx.fillStyle = gradient;
+        smokeCtx.beginPath();
+        smokeCtx.arc(0, 0, currentRadius, 0, Math.PI * 2);
+        smokeCtx.fill();
+        smokeCtx.restore();
       });
 
-      // Soft Natural Embers
+      // --- CANVAS 2 (z-25): FOREGROUND SPARKS & EMBERS (Fly all over the screen) ---
+      sparkCtx.globalCompositeOperation = "source-over";
+
       softEmbers.forEach((e) => {
         e.y += e.speedY;
         e.x += e.speedX + Math.sin(time * 1.5 + e.y * 0.02) * 0.15;
 
         if (e.y < -10) {
-          e.y = canvas.height + 10;
-          e.x = Math.random() * canvas.width;
+          e.y = sparkCanvas.height + 10;
+          e.x = Math.random() * sparkCanvas.width;
         }
 
         const currentAlpha = (e.alpha + bpmPulse * 0.1) * (0.7 + 0.3 * Math.sin(time * 2.0 + e.x));
 
-        ctx.fillStyle = `rgba(255, 170, 30, ${Math.max(0, currentAlpha)})`;
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.size * (1 + bpmPulse * 0.1), 0, Math.PI * 2);
-        ctx.fill();
+        sparkCtx.fillStyle = `rgba(255, 170, 30, ${Math.max(0, currentAlpha)})`;
+        sparkCtx.beginPath();
+        sparkCtx.arc(e.x, e.y, e.size * (1 + bpmPulse * 0.1), 0, Math.PI * 2);
+        sparkCtx.fill();
       });
 
-      // --- PASS 2: Vivid Light Golden Accent Sparks ---
-      ctx.globalCompositeOperation = "lighter";
+      sparkCtx.globalCompositeOperation = "lighter";
 
       brightEmbers.forEach((e, idx) => {
         e.life += 1;
@@ -208,21 +213,21 @@ export default function SmokeEffect() {
         const glowRadius = (e.size * 2.8) * (1 + bpmPulse * 0.15);
         const currentAlpha = Math.min(1.0, Math.max(0, (e.alpha + bpmPulse * 0.08) * (0.85 + 0.15 * Math.sin(time * 4 + e.x))));
         
-        const emberGradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
+        const emberGradient = sparkCtx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
         emberGradient.addColorStop(0, `rgba(255, 255, 245, ${currentAlpha})`);
         emberGradient.addColorStop(0.35, `rgba(255, 185, 30, ${currentAlpha * 0.85})`);
         emberGradient.addColorStop(0.7, `rgba(255, 100, 10, ${currentAlpha * 0.45})`);
         emberGradient.addColorStop(1, `rgba(210, 40, 0, 0)`);
 
-        ctx.fillStyle = emberGradient;
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, glowRadius, 0, Math.PI * 2);
-        ctx.fill();
+        sparkCtx.fillStyle = emberGradient;
+        sparkCtx.beginPath();
+        sparkCtx.arc(e.x, e.y, glowRadius, 0, Math.PI * 2);
+        sparkCtx.fill();
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.2)})`;
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.size * 0.7, 0, Math.PI * 2);
-        ctx.fill();
+        sparkCtx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.2)})`;
+        sparkCtx.beginPath();
+        sparkCtx.arc(e.x, e.y, e.size * 0.7, 0, Math.PI * 2);
+        sparkCtx.fill();
       });
 
       animationFrameId = requestAnimationFrame(render);
@@ -237,11 +242,22 @@ export default function SmokeEffect() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-15 overflow-hidden">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full opacity-95 mix-blend-screen"
-      />
-    </div>
+    <>
+      {/* 1. Smoke Canvas Layer: Strictly BEHIND artwork cards on z-0 */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <canvas
+          ref={smokeCanvasRef}
+          className="w-full h-full opacity-90 mix-blend-screen"
+        />
+      </div>
+
+      {/* 2. Spark/Ember Canvas Layer: Flying over screen on z-25 */}
+      <div className="fixed inset-0 pointer-events-none z-25 overflow-hidden">
+        <canvas
+          ref={sparkCanvasRef}
+          className="w-full h-full opacity-95 mix-blend-screen"
+        />
+      </div>
+    </>
   );
 }
