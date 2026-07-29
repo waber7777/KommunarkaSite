@@ -42,7 +42,7 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
   };
 
   return (
-    <div className="fixed top-24 right-6 md:right-12 z-50 flex items-center gap-2">
+    <div className="fixed top-24 right-36 md:right-44 z-50 flex items-center gap-2">
       <audio
         ref={audioRef}
         src="/assets/ambient-ritual.mp3"
@@ -51,7 +51,7 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
       />
       <button
         onClick={toggleAudio}
-        className={`px-3 py-1.5 text-xs font-mono transition-all flex items-center gap-2 border backdrop-blur-md shadow-lg ${
+        className={`px-3 py-1 text-xs font-mono transition-all flex items-center gap-2 border backdrop-blur-md shadow-lg ${
           isPlaying
             ? "border-accent text-accent bg-accent/10 font-bold"
             : "border-white/20 text-secondary hover:text-white bg-black/80"

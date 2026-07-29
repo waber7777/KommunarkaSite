@@ -150,7 +150,7 @@ export default function AuctionPage() {
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
         {/* Language Switcher Bar */}
-        <div className="absolute top-24 right-6 md:right-12 z-30 flex items-center gap-1 border border-white/10 p-1 bg-black/60 backdrop-blur-md text-xs font-mono">
+        <div className="fixed top-24 right-6 md:right-12 z-50 flex items-center gap-1 border border-white/10 p-1 bg-black/80 backdrop-blur-md text-xs font-mono shadow-lg">
           <button
               onClick={() => setLang("ru")}
               className={`px-3 py-1 transition-all ${
