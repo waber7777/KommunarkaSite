@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getBassLevel } from "@/components/AmbientAudio";
 
 export default function SmokeEffect() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -62,7 +63,7 @@ export default function SmokeEffect() {
       });
     }
 
-    // 2. High-Contrast Glowing Fire Embers System
+    // 2. Audio-Rhythmic Glowing Fire Embers System
     const emberCount = 65;
 
     interface RealisticEmber {
@@ -83,8 +84,8 @@ export default function SmokeEffect() {
       return {
         x: Math.random() * canvas.width,
         y: initialY !== undefined ? initialY : canvas.height + Math.random() * 60,
-        size: Math.random() * 3.5 + 1.8, // Larger, vivid sparks
-        speedY: -Math.random() * 1.2 - 0.4, // Active upward lift
+        size: Math.random() * 3.5 + 1.8,
+        speedY: -Math.random() * 1.2 - 0.4,
         speedX: (Math.random() - 0.5) * 0.5,
         alpha: 0,
         maxAlpha: Math.random() * 0.85 + 0.35,
@@ -100,9 +101,26 @@ export default function SmokeEffect() {
       embers.push(createEmber(Math.random() * canvas.height));
     }
 
+    let smoothBass = 0;
+
     const render = () => {
       time += 0.018;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Read live bass pulse from Web Audio API (or simulated rhythmic beat)
+      const rawBass = getBassLevel();
+      let activeBassKick = 0;
+
+      if (rawBass > 10) {
+        // Live audio kick
+        smoothBass = smoothBass * 0.7 + (rawBass / 255) * 0.3;
+        activeBassKick = Math.max(0, (smoothBass - 0.4) * 2.2);
+      } else {
+        // Fallback rhythmic pulse simulation in tune with 120 BPM beat
+        const beatTime = (time * 2.0) % (Math.PI * 2);
+        const beatPulse = Math.pow(Math.max(0, Math.sin(beatTime)), 6);
+        activeBassKick = beatPulse * 0.6;
+      }
 
       // --- PASS 1: Render Background Smoke Clouds ---
       ctx.globalCompositeOperation = "source-over";
@@ -117,8 +135,8 @@ export default function SmokeEffect() {
           p.x = Math.random() * canvas.width;
         }
 
-        const currentRadius = p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 25;
-        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.02;
+        const currentRadius = p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 25 + activeBassKick * 30;
+        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.02 + activeBassKick * 0.03;
 
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -136,12 +154,13 @@ export default function SmokeEffect() {
         ctx.restore();
       });
 
-      // --- PASS 2: Vivid Fire Embers (Additive Blend Mode) ---
+      // --- PASS 2: Rhythmic Glowing Fire Embers (Additive Glowing Blending) ---
       ctx.globalCompositeOperation = "lighter";
 
       embers.forEach((e, idx) => {
         e.life += 1;
-        e.y += e.speedY;
+        // Boost ember speed and pulse intensity when bass kick hits
+        e.y += e.speedY * (1 + activeBassKick * 0.8);
         e.x += e.speedX + Math.sin(time * 2.5 + e.y * 0.02) * e.wobbleAmp;
 
         const lifeRatio = e.life / e.maxLife;
@@ -158,10 +177,11 @@ export default function SmokeEffect() {
           return;
         }
 
-        // Intense Fire Gradient: Bright Pure White Core -> Fiery Amber/Orange Outer Glow
-        const glowRadius = e.size * 4.0;
+        // Bass Kick Boosts Spark Size & Brightness Pulsing in Beat
+        const pulseSizeMultiplier = 1 + activeBassKick * 0.75;
+        const glowRadius = e.size * 4.0 * pulseSizeMultiplier;
         const emberGradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
-        const currentAlpha = Math.max(0, e.alpha * (0.8 + 0.2 * Math.sin(time * 8 + e.x)));
+        const currentAlpha = Math.min(1.0, Math.max(0, (e.alpha + activeBassKick * 0.3) * (0.8 + 0.2 * Math.sin(time * 8 + e.x))));
         
         emberGradient.addColorStop(0, `rgba(255, 255, 255, ${currentAlpha})`);
         emberGradient.addColorStop(0.3, `rgba(255, 190, 30, ${currentAlpha * 0.9})`);
@@ -174,9 +194,9 @@ export default function SmokeEffect() {
         ctx.fill();
 
         // Hot Inner Spark Core
-        ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha * 0.98})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.1)})`;
         ctx.beginPath();
-        ctx.arc(e.x, e.y, e.size * 0.8, 0, Math.PI * 2);
+        ctx.arc(e.x, e.y, e.size * 0.8 * pulseSizeMultiplier, 0, Math.PI * 2);
         ctx.fill();
       });
 

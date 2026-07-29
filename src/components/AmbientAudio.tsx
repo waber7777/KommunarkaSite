@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+
+// Global Bass Level Exporter for Canvas Sync
+export let getBassLevel = (): number => 0;
 
 interface AmbientAudioProps {
   lang?: "ru" | "en";
@@ -10,7 +12,9 @@ interface AmbientAudioProps {
 export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const pathname = usePathname();
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const dataArrayRef = useRef<Uint8Array | null>(null);
 
   useEffect(() => {
     // Check saved audio preference
@@ -18,10 +22,45 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
     if (savedAudioPref === "true" && audioRef.current) {
       audioRef.current
         .play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          setIsPlaying(true);
+          initAudioAnalyser();
+        })
         .catch(() => setIsPlaying(false));
     }
+
+    // Attach global bass meter function
+    getBassLevel = () => {
+      if (!analyserRef.current || !dataArrayRef.current) return 0;
+      // Read low frequencies (bass kick range 0..8)
+      analyserRef.current.getByteFrequencyData(dataArrayRef.current as any);
+      let bassSum = 0;
+      for (let i = 0; i < 8; i++) {
+        bassSum += dataArrayRef.current[i];
+      }
+      return bassSum / 8; // Average Bass Level (0..255)
+    };
   }, []);
+
+  const initAudioAnalyser = () => {
+    if (audioCtxRef.current || !audioRef.current) return;
+    try {
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const audioCtx = new AudioContextClass();
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      const source = audioCtx.createMediaElementSource(audioRef.current);
+
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+
+      audioCtxRef.current = audioCtx;
+      analyserRef.current = analyser;
+      dataArrayRef.current = new Uint8Array(analyser.frequencyBinCount);
+    } catch (e) {
+      console.log("Web Audio API initialization note:", e);
+    }
+  };
 
   const toggleAudio = () => {
     if (!audioRef.current) return;
@@ -31,6 +70,11 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
       setIsPlaying(false);
       localStorage.setItem("kommunarka_ambient_audio", "false");
     } else {
+      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+        audioCtxRef.current.resume();
+      }
+      initAudioAnalyser();
+
       audioRef.current
         .play()
         .then(() => {
@@ -50,6 +94,7 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
         src="/assets/ambient-ritual.mp3"
         loop
         preload="auto"
+        crossOrigin="anonymous"
       />
       <button
         onClick={toggleAudio}
