@@ -6,7 +6,7 @@ import Navigation from "@/components/Navigation";
 import TypewriterText from "@/components/TypewriterText";
 import Counter from "@/components/Counter";
 import SmokeEffect from "@/components/SmokeEffect";
-import AmbientAudio from "@/components/AmbientAudio";
+import GlobalControlBar from "@/components/GlobalControlBar";
 
 export default function AuctionPage() {
   // Language State: 'ru' | 'en'
@@ -149,25 +149,8 @@ export default function AuctionPage() {
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
-        {/* Language Switcher Bar */}
-        <div className="fixed top-24 right-6 md:right-12 z-50 flex items-center gap-1 border border-white/10 p-1 bg-black/80 backdrop-blur-md text-xs font-mono shadow-lg">
-          <button
-              onClick={() => setLang("ru")}
-              className={`px-3 py-1 transition-all ${
-                lang === "ru" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
-              }`}
-            >
-              RU
-            </button>
-            <button
-              onClick={() => setLang("en")}
-              className={`px-3 py-1 transition-all ${
-                lang === "en" ? "bg-accent text-black font-bold" : "text-secondary hover:text-white"
-              }`}
-            >
-              EN
-            </button>
-          </div>
+        {/* Unified Control Bar (Language & Sound) */}
+        <GlobalControlBar lang={lang} setLang={setLang} />
 
         {/* Ambient Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent/10 rounded-full blur-[160px] pointer-events-none" />
