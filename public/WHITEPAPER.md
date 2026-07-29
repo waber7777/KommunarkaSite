@@ -1,146 +1,137 @@
-# 📜 KommunarkaCoin ($KOMMUNARKA) — Whitepaper & Strategy
-
-> 🌐 **Language / Язык:** **[ EN ] English (Whitepaper)** | [**[ RU ] Русский (KOMMUNARKA_STRATEGY.md)**](KOMMUNARKA_STRATEGY.md)
+# KommunarkaCoin ($KOMMUNARKA): Technical & Tokenomics Whitepaper
+*Phygital Art Protocol Connecting Real World Porcelain Sculpture, Deflationary Tokenomics, and Global Auction Infrastructure.*
 
 ---
 
-## 📋 Table of Contents
-1. [Core Concept & Master Vision](#1-core-concept--master-vision)
-2. [Market Analysis & Reddit Community Sentiment](#2-market-analysis--reddit-community-sentiment)
-3. [Case Studies (Damien Hirst, Botto DAO, Burnt Banksy)](#3-case-studies)
-4. [For Artists: Value Proposition & Metaphors](#4-for-artists-value-proposition--metaphors)
-5. [Botto DAO Blueprint: Why Investors Hold the Token](#5-botto-dao-blueprint)
-6. [Protocol Architecture: Step-by-Step Auction Models](#6-protocol-architecture)
-7. [International Logistics: Artwork Shipping from Russia](#7-international-logistics)
-8. [NFT Value: Physical Home Delivery vs Gallery Vault Staking](#8-nft-value-physical-home-delivery-vs-gallery-vault-staking)
-9. [Financial Model: 3-Way Synergy & Artist Payouts](#9-financial-model)
-10. [Growth Scenarios & Risk Governance](#10-growth-scenarios--risk-governance)
-11. [Step-by-Step Launch Roadmap](#11-step-by-step-launch-roadmap)
+## Executive Summary
+
+**KommunarkaCoin ($KOMMUNARKA)** is a pioneering Solana-based Phygital Protocol that merges tangible physical artwork (industrial porcelain, metal, and concrete sculptures created in Moscow Studio Kommunarka) with high-liquidity crypto-economics.
+
+Every physical art auction permanently reduces the circulating token supply through an automated **Burn Engine** or generates direct **DEX Market Buy Pressure**, establishing a sustainable floor price backed by real-world assets.
 
 ---
 
 ## 1. Core Concept & Master Vision
 
-**KommunarkaCoin ($KOMMUNARKA)** is a hybrid Web3 protocol connecting three major crypto catalysts:
-* **Memecoin Dynamics:** Virality, community engagement, high-liquidity trading, and meme culture.
-* **Real World Assets (RWA) / Phygital Art:** Grounded in tangible physical sculptures and paintings created from industrial porcelain, steel, and concrete.
-* **Deflationary Tokenomics (Burn Engine):** Every physical art auction permanently destroys $KOMMUNARKA tokens from circulation, generating systematic supply scarcity.
+KommunarkaCoin bridges three dominant market catalysts:
+* **Real World Assets (RWA) / Phygital Art:** Authentic physical sculptures and paintings equipped with tamper-proof NFC chips and 1-of-1 Solana NFT Provenance Passports.
+* **Deflationary Tokenomics (Burn Engine):** Every auction destroys $KOMMUNARKA tokens or executes direct market buy orders on Decentralized Exchanges (DEX).
+* **Community Curation & Yield (DAO Governance):** Token holders hold voting rights to curate upcoming art collections and share in physical gallery exhibition revenue.
 
 ---
 
-## 2. Market Analysis & Reddit Community Sentiment
+## 2. Comprehensive 4-Pillar Value Proposition
 
-Deep-dive research across crypto communities (`r/CryptoCurrency`, `r/solana`, `r/NFT`) highlights key market trends:
+> **Why participating in $KOMMUNARKA ecosystem creates exponential value for all participants:**
 
-1. **Fatigue from Utility-less Memecoins:** Investors actively seek projects with real-world backing. Physical art creates intrinsic value.
-2. **Sentiment on Token Burning:**
-   * *Skepticism:* Artificial "dead wallet burns" without revenue are viewed as gimmicks.
-   * *High Approval:* **Revenue-driven Buyback & Burn** (buying back tokens on DEX with actual auction proceeds) is rated as the most transparent value-driver.
-3. **Phygital Provenance:** Utilizing NFTs as digital certificates for physical artwork resolves historical art market friction—fake provenance and slow transfer of title.
+```
++-----------------------------------------------------------------------------------+
+|                        $KOMMUNARKA ECOSYSTEM SYNERGY                              |
++--------------------------+--------------------------+-----------------------------+
+|    EARLY INVESTORS       |    RETAIL TRADERS        |       ART COLLECTORS        |
+|  - Staking Lockup Yield  |  - DEX Market Buyback    |  - 1-of-1 NFT + NFC Passport|
+|  - Gallery Revenue %     |  - Constant Green Candles|  - Physical Delivery / Vault|
+|  - Deflationary Protection| - 100% On-Chain Proof   |  - Exhibition Royalty Yield |
++--------------------------+--------------------------+-----------------------------+
+                                       |
+                                       v
+                           +------------------------+
+                           |  ARTISTS & CREATORS    |
+                           |  - 25-50% Instant Cash |
+                           |  - 5-10% Lifetime Roy. |
+                           |  - Global Recognition  |
+                           +------------------------+
+```
 
----
+### 🥇 1. For Early Seed Investors & Token Lockup Stakers
+* **Staking Lockup Yield:** Investors can lock their $KOMMUNARKA tokens in the Vault for 3, 6, or 12 months.
+* **Physical Gallery Dividends:** Stakers receive passive yields in SOL/USDT generated from physical gallery ticket sales, merchandise, and brand licensing.
+* **Deflationary Value Guard:** Systematic auction burning continuously shrinks token supply, automatically increasing the scarcity and value of locked tokens.
 
-## 3. Case Studies
+### 📈 2. For Retail DEX/CEX Traders
+* **Guaranteed DEX Market Buy Pressure:** When a physical artwork sells (e.g. $25,000 USD), 50% of the proceeds ($12,500 USDT) instantly execute a Market Buy Order on Raydium/Orca DEX, creating organic green candles.
+* **100% Transparent On-Chain Proof:** No artificial dead-wallet gimmicks. Every buyback and burn is verifiably executed on Solana smart contracts.
 
-* **Damien Hirst — *The Currency*:** 10,000 physical paintings tied to 10,000 NFTs. Buyers had to choose one; the unchosen version was physically burned. Created global media coverage.
-* **Botto DAO ($BOTTO):** Decentralized AI artist generating over **$4,000,000+** in SuperRare auctions, directing revenue to token buyback, burn, and staker yields.
-* **Burnt Banksy:** Injective Protocol group purchased a $95k Banksy print, burned it on livestream, and minted the NFT—sparking exponential asset value growth.
+### 🖼️ 3. For Art Collectors & Gallery Vaults
+* **Phygital 1-of-1 NFT Passport:** Every physical piece includes a tamper-proof NFC chip paired with a Solana NFT, eliminating forgery and fake provenance.
+* **Flexible Delivery vs. Gallery Vault Staking:** Auction winners can either choose **Physical Home Delivery** OR stake the artwork in an **Authorized Gallery Vault** to earn yield from exhibition visitors.
 
----
+### 🎨 4. For Artists & Craftsmanship Authors (Simple Explanation)
+> *"Imagine your studio creates physical masterpieces in porcelain and steel. Our protocol hosts global web3 auctions, sells the piece for top value, pays you instantly, and uses remaining funds to perpetually market your name worldwide."*
 
-## 4. For Artists: Value Proposition
-
-> **How to explain the protocol to traditional artists in plain English?**
-
-### 🎨 The Metaphor
-*"Imagine your traditional art studio partners with an international club of collectors and investors. You create physical paintings in porcelain and steel. The club hosts global auctions, sells the piece for high value, pays you directly, and uses remaining funds to perpetually market your name worldwide—increasing the value of all your future works."*
-
-### 🚀 Key Benefits for Authors:
-1. **Guaranteed Upfront Payout:** Direct compensation in USD/SOL/USDT right after each auction.
-2. **Lifetime Secondary Royalties (5–10%):** On-chain smart contracts enforce royalties for every future secondary resale of the NFT provenance passport.
-3. **Global Audience:** No 50% traditional gallery commissions.
-4. **Preservation of Physical Craft:** Physical artworks remain authentic physical masterpieces.
-
----
-
-## 5. Botto DAO Blueprint: Why Hold the Token?
-
-> **Why buy and hold $KOMMUNARKA if auctions accept SOL/USDT?**
-
-1. **Voting Power & Curation:** Staking tokens grants curation rights to vote on the next artwork theme.
-2. **Passive Yield in SOL/USDT:** 50% of auction proceeds are paid out in SOL/USDT to participating token stakers.
-3. **Market Buyback Pressure:** 50% of proceeds execute direct Market Buy orders on DEX (Raydium), creating green candles before burning the tokens.
-4. **VIP Gated Access:** Token holders receive early access to physical merchandise drops and whitelist auction spots.
-
-*Resources:* [botto.com](https://www.botto.com) | [superrare.com/botto](https://superrare.com/botto) | [DexScreener $BOTTO](https://dexscreener.com/ethereum/0x9dfad1b7102d46b1b197b90095b5c4e9f5845bba)
+* **Instant Guaranteed Cash Payout (25% – 50%):** Direct compensation in USD/SOL right after auction closing.
+* **Lifetime Secondary Royalties (5% – 10%):** Smart contracts automatically send royalties to the artist on every secondary NFT resale across Magic Eden or Tensor.
+* **No Traditional Gallery Middlemen:** Eliminates traditional 50% gallery commissions.
 
 ---
 
-## 6. Protocol Architecture: Step-by-Step Auction Models
+## 3. Case Studies & Proven Benchmarks
+
+* **Damien Hirst — *The Currency*:** 10,000 physical paintings paired with 10,000 NFTs. Unchosen physical versions were publicly burned, generating massive media valuation.
+* **Botto DAO ($BOTTO):** Decentralized AI artist generating over **$4,000,000+** in SuperRare auctions, channeling revenue into DEX token buyback, burn, and staker yields.
+* **Burnt Banksy:** Injective Protocol group purchased a $95,000 Banksy print, burned it on livestream, and minted the NFT—sparking exponential asset value growth.
+
+---
+
+## 4. Protocol Architecture & Dual Auction Models
+
+```
+         +-------------------------------------------------------+
+         |                 AUCTION WINNING BID                   |
+         +-------------------------------------------------------+
+                                     |
+               +---------------------+---------------------+
+               |                                           |
+               v                                           v
+    MODEL 1: BURN BIDDING                     MODEL 2: BOTTO BUYBACK
+  (Bids placed in $KOMMUNARKA)               (Bids in SOL / USDT / Fiat)
+               |                                           |
+    +----------+----------+                     +----------+----------+
+    |                     |                     |                     |
+    v                     v                     v                     v
+ 75% BURN             25% ARTIST             50% DEX BUYBACK       50% ARTIST
+ (Dead Wallet)        (Payout)               (Raydium Green Candle)(& Staker Yield)
+```
 
 ### Model 1: "Burn Bidding" (Direct Token Bids)
-1. **Bidding:** Bids placed strictly in `$KOMMUNARKA` tokens, locked in smart contracts.
-2. **Unsuccessful Bidders (100% Refund):** Smart contract instantly refunds 100% of tokens to non-winning bidders. Bidders keep their tokens, which appreciate from the burn!
-3. **Winning Bid Allocation:**
+1. **Bidding:** Bids are placed in `$KOMMUNARKA` tokens and locked in smart contracts.
+2. **Unsuccessful Bidders (100% Instant Refund):** Non-winning bidders instantly receive 100% of their tokens back.
+3. **Winning Proceeds Allocation:**
    * **75% of winning tokens permanently burned** to a dead address.
-   * **25% transferred to the Artist** as compensation.
+   * **25% transferred to the Artist** as direct compensation.
 
-### Model 2: "Botto-Style Buyback" (Bids in SOL / USDT / Fiat)
-1. **Bidding:** Bids accepted in SOL, USDT, USDC, or credit cards for traditional collectors.
-2. **Unsuccessful Bidders (100% Refund):** All non-winning funds instantly unlocked.
-3. **Winning Proceeds Allocation ($25,000 USD example):**
+### Model 2: "Botto-Style Buyback" (Bids in SOL / USDT / Credit Cards)
+1. **Bidding:** Bids accepted in SOL, USDT, USDC, or traditional credit cards.
+2. **Winning Proceeds Allocation ($25,000 USD example):**
    * **50% ($12,500 USDT):** Executes DEX Market Buy on Raydium (green candles), then burns the acquired tokens.
    * **50% ($12,500 USDT):** Paid to Artist and Staker Yield pool.
 
 ---
 
-## 7. International Logistics: Shipping from Russia
+## 5. Tokenomics & Deflationary Parameters
 
-1. **Ministry of Culture Authorization:** Contemporary artwork (under 50 years old) is legally classified as non-restricted. Certified export permits take 2–3 business days ($20–$40 fee).
-2. **Global Carriers:** EMS International, CDEK Art, and Art Mail deliver to 180+ countries with custom wooden crate packaging and full insurance.
-3. **Logistics Coverage:** Fully funded via auction proceeds reserve (5–10%).
+* **Token Symbol:** `$KOMMUNARKA`
+* **Blockchain:** Solana Mainnet
+* **Total Supply:** `1,000,000,000` (1 Billion Tokens)
+* **Burn Engine:** Automated On-Chain Program
 
----
-
-## 8. NFT Value: Physical Home Delivery vs Gallery Vault Staking
-
-> **What happens to the NFT and yield when an artwork is delivered home vs kept in the gallery?**
-
-The auction winner has two distinct choices of asset ownership:
-
-### 🏠 Scenario 1: Winner Claims Physical Delivery Home
-* The winner triggers shipping. The artwork is packaged and delivered via insured courier to their residence.
-* **NFT Status:** The 1-of-1 NFT resides in the owner's wallet as an exclusive digital provenance passport.
-* **Yield Impact:** Because the artwork is physically at home and no longer touring in the gallery foundation, **this un-staked NFT does not generate exhibition yield**. The owner holds the physical original and title.
-
-### 🏛️ Scenario 2: Artwork Remains in Gallery Vault (Vaulted Staking)
-* The winner chooses to leave the physical artwork in the studio gallery foundation to tour global exhibitions and fairs.
-* **NFT Status:** The winner stakes their 1-of-1 NFT into the **Gallery Vault Contract** (`Staked NFT`).
-* **Passive Exhibition Yield:** While staked, the owner **receives regular dividend payouts in SOL/USDT** generated from exhibition ticket sales, merchandise profits, and commercial licensing rights!
+| Market Cap | Winning Bid | Annual Auctions | Annual Tokens Burned | Annual Supply Reduction |
+| :--- | :--- | :--- | :--- | :--- |
+| **$500,000** | $10,000 | 12 (Monthly) | 180,000,000 | **-18.0%** |
+| **$1,000,000** | $25,000 | 12 (Monthly) | 225,000,000 | **-22.5%** |
+| **$2,500,000** | $50,000 | 24 (Bi-Weekly) | 360,000,000 | **-36.0%** |
 
 ---
 
-## 9. Financial Model & Synergies
+## 6. International Logistics & Security
 
-| Stakeholder | Incentives & Value |
-| :--- | :--- |
-| **Founders & Core Team** | • 5-8% Dev Wallet (Vested).<br>• DEX Liquidity Provider (LP) fees.<br>• Token market cap appreciation. |
-| **Artist / Author** | • **Upfront Auction Payout** (25% Burn Bidding / 50% Buyback).<br>• **5-10% Lifetime On-chain Royalties** on all secondary NFT sales.<br>• Global PR. |
-| **Traders & Collectors** | • **Traders:** Systematic deflationary supply reduction.<br>• **Collectors:** Physical masterpiece + NFT passport + exhibition yield when staked. |
+1. **Ministry of Culture Export Certification:** Contemporary artwork (under 50 years old) is legally certified for export within 2–3 business days.
+2. **Global White-Glove Shipping:** EMS International, CDEK Art, and DHL Express deliver to 180+ countries with custom wooden crate packaging and full insurance.
 
 ---
 
-## 10. Growth Scenarios & Risk Governance
+## 7. Roadmap
 
-* 🟢 **Bull Scenario:** High-profile token launch $\rightarrow$ Auction #1 burn $\rightarrow$ Media coverage $\rightarrow$ $KOMMUNARKA price surge $\rightarrow$ Higher artwork valuations.
-* 🔴 **Risk Mitigation:** Initial auction announced on Day 1 to prevent pre-auction momentum loss; smart contract locks prevent bid sniping.
-
----
-
-## 11. Step-by-Step Launch Roadmap
-
-1. [ ] Finalize Physical Artwork #1 & film creation documentary.
-2. [ ] Deploy $KOMMUNARKA token contract on Solana Mainnet.
-3. [ ] Launch Phygital Auction dApp with live Burn Counter.
-4. [ ] Process Ministry of Culture export certification.
-5. [ ] Initiate global "RWA + Art Memecoin" campaign.
+* **Phase 1 (Q3 2026):** Token Launch on Raydium DEX, Phygital Protocol Website & Auction House Release.
+* **Phase 2 (Q4 2026):** First Physical Artwork Auction (Lot #01 «Заборы. Лист №1»), First Automated Token Burn.
+* **Phase 3 (Q1 2027):** Staking Vault & Physical Gallery Revenue Share Distribution.
