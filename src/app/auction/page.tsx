@@ -149,8 +149,6 @@ export default function AuctionPage() {
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 relative overflow-hidden">
-        {/* Unified Control Bar (Language & Sound) */}
-        <GlobalControlBar lang={lang} setLang={setLang} />
 
         {/* Ambient Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent/10 rounded-full blur-[160px] pointer-events-none" />
