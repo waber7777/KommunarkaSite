@@ -2,24 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 
-// Global Audio Frequency & Beat Detector
-let audioContext: AudioContext | null = null;
-let analyser: AnalyserNode | null = null;
-let frequencyData: Uint8Array | null = null;
-
-export const getBassLevel = (): number => {
-  if (!analyser || !frequencyData) return 0;
-  // @ts-ignore
-  analyser.getByteFrequencyData(frequencyData);
-  
-  // Read Low Bass Frequency Bins (Sub-bass / Kick drum: 0 to 6)
-  let bassSum = 0;
-  for (let i = 0; i < 6; i++) {
-    bassSum += frequencyData[i];
-  }
-  return bassSum / 6; // Returns average volume 0..255
-};
-
 interface AmbientAudioProps {
   lang?: "ru" | "en";
 }
@@ -29,33 +11,17 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Check saved preference
+    // Check saved audio preference
     const savedAudioPref = localStorage.getItem("kommunarka_ambient_audio");
     if (savedAudioPref === "true" && audioRef.current) {
-      // Audio autoplay requires user gesture
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
     }
   }, []);
 
-  const setupWebAudioAPI = () => {
-    if (!audioRef.current || audioContext) return;
-    try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      audioContext = new AudioCtx();
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 128;
-      analyser.smoothingTimeConstant = 0.4; // Responsive kick detection
-
-      const source = audioContext.createMediaElementSource(audioRef.current);
-      source.connect(analyser);
-      analyser.connect(audioContext.destination);
-
-      frequencyData = new Uint8Array(analyser.frequencyBinCount);
-    } catch (e) {
-      console.log("AudioContext setup:", e);
-    }
-  };
-
-  const toggleAudio = async () => {
+  const toggleAudio = () => {
     if (!audioRef.current) return;
 
     if (isPlaying) {
@@ -63,18 +29,15 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
       setIsPlaying(false);
       localStorage.setItem("kommunarka_ambient_audio", "false");
     } else {
-      setupWebAudioAPI();
-      if (audioContext && audioContext.state === "suspended") {
-        await audioContext.resume();
-      }
-
-      try {
-        await audioRef.current.play();
-        setIsPlaying(true);
-        localStorage.setItem("kommunarka_ambient_audio", "true");
-      } catch (err) {
-        console.log("Audio playback blocked:", err);
-      }
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          localStorage.setItem("kommunarka_ambient_audio", "true");
+        })
+        .catch((err) => {
+          console.log("Audio play blocked by browser policy:", err);
+        });
     }
   };
 
@@ -85,7 +48,6 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
         src="/assets/ambient-ritual.mp3"
         loop
         preload="auto"
-        crossOrigin="anonymous"
       />
       <button
         onClick={toggleAudio}
