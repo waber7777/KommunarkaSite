@@ -25,14 +25,16 @@ export default function SmokeEffect() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // 1. Adaptive Industrial Smoke Clouds Parameters
-    const smokePuffCount = isMobile ? 12 : 30; // 60% fewer clouds on mobile
-    const smokeAlphaMult = isMobile ? 0.35 : 1.0; // 65% lighter smoke transparency on mobile
+    // 1. Adaptive Industrial Smoke Clouds - Light & Vivid Color Palette
+    const smokePuffCount = isMobile ? 14 : 30;
+    const smokeAlphaMult = isMobile ? 0.45 : 1.0;
+    
+    // Bright, vibrant, warm golden & light silver palette
     const smokeColors = [
-      "rgba(255, 170, 30, ",  // Amber mist
-      "rgba(100, 105, 115, ", // Charcoal fog
-      "rgba(55, 55, 65, ",    // Ash mist
-      "rgba(190, 95, 25, "    // Copper rust
+      "rgba(255, 195, 60, ",   // Luminous warm amber mist
+      "rgba(255, 225, 140, ",  // Bright golden haze
+      "rgba(160, 165, 180, ",  // Soft silver smoke
+      "rgba(240, 140, 45, "    // Bright copper ember glow
     ];
 
     interface SmokePuff {
@@ -59,16 +61,16 @@ export default function SmokeEffect() {
         speedY: -Math.random() * 0.12 - 0.04,
         waveFreq: Math.random() * 0.01 + 0.003,
         waveAmp: Math.random() * 1.8 + 0.4,
-        alpha: (Math.random() * 0.08 + 0.03) * smokeAlphaMult,
+        alpha: (Math.random() * 0.09 + 0.04) * smokeAlphaMult,
         color: smokeColors[Math.floor(Math.random() * smokeColors.length)],
         angle: Math.random() * Math.PI * 2,
         spinSpeed: (Math.random() - 0.5) * 0.002
       });
     }
 
-    // 2. Adaptive Soft Natural Base Embers (2x smaller & fewer on mobile)
-    const softEmberCount = isMobile ? 16 : 35;
-    const emberSizeScale = isMobile ? 0.5 : 1.0; // 2x smaller on mobile
+    // 2. Soft Luminous Natural Embers
+    const softEmberCount = isMobile ? 18 : 35;
+    const emberSizeScale = isMobile ? 0.5 : 1.0;
 
     interface SoftEmber {
       x: number;
@@ -88,13 +90,13 @@ export default function SmokeEffect() {
         size: (Math.random() * 1.6 + 0.5) * emberSizeScale,
         speedY: -Math.random() * 0.3 - 0.07,
         speedX: (Math.random() - 0.5) * 0.2,
-        alpha: (Math.random() * 0.5 + 0.2) * (isMobile ? 0.7 : 1.0),
+        alpha: Math.random() * 0.65 + 0.35, // More vivid and bright
         pulseSpeed: Math.random() * 0.03 + 0.01
       });
     }
 
-    // 3. Adaptive Bright Micro Glowing Sparks (2x smaller on mobile)
-    const brightEmberCount = isMobile ? 7 : 14;
+    // 3. Bright Vivid Golden Micro Glowing Sparks
+    const brightEmberCount = isMobile ? 10 : 16;
     interface BrightEmber {
       x: number;
       y: number;
@@ -111,11 +113,11 @@ export default function SmokeEffect() {
       return {
         x: Math.random() * canvas.width,
         y: initialY !== undefined ? initialY : canvas.height + Math.random() * 40,
-        size: (Math.random() * 1.0 + 0.4) * emberSizeScale, // Micro sparks on mobile
+        size: (Math.random() * 1.1 + 0.5) * emberSizeScale,
         speedY: -Math.random() * 0.5 - 0.2,
         speedX: (Math.random() - 0.5) * 0.3,
         alpha: 0,
-        maxAlpha: (Math.random() * 0.5 + 0.25) * (isMobile ? 0.7 : 1.0),
+        maxAlpha: Math.random() * 0.7 + 0.3,
         life: 0,
         maxLife: Math.random() * 240 + 150
       };
@@ -133,7 +135,7 @@ export default function SmokeEffect() {
       const beatCycle = (time * 6.28) % 3.14;
       const bpmPulse = Math.pow(Math.sin(beatCycle), 6) * (isMobile ? 0.15 : 0.3);
 
-      // --- PASS 1: Render Smoke Clouds & Natural Soft Embers ---
+      // --- PASS 1: Render Luminous Smoke Clouds & Soft Embers ---
       ctx.globalCompositeOperation = "source-over";
 
       smokePuffs.forEach((p) => {
@@ -147,7 +149,7 @@ export default function SmokeEffect() {
         }
 
         const currentRadius = p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 15 + bpmPulse * 10;
-        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.01;
+        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.015;
 
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -155,7 +157,7 @@ export default function SmokeEffect() {
 
         const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, currentRadius);
         gradient.addColorStop(0, `${p.color}${Math.max(0, currentAlpha)})`);
-        gradient.addColorStop(0.5, `${p.color}${Math.max(0, currentAlpha * 0.3)})`);
+        gradient.addColorStop(0.5, `${p.color}${Math.max(0, currentAlpha * 0.4)})`);
         gradient.addColorStop(1, `${p.color}0)`);
 
         ctx.fillStyle = gradient;
@@ -165,6 +167,7 @@ export default function SmokeEffect() {
         ctx.restore();
       });
 
+      // Bright Golden Natural Embers
       softEmbers.forEach((e) => {
         e.y += e.speedY;
         e.x += e.speedX + Math.sin(time * 2 + e.y * 0.02) * 0.25;
@@ -174,15 +177,16 @@ export default function SmokeEffect() {
           e.x = Math.random() * canvas.width;
         }
 
-        const currentAlpha = (e.alpha + bpmPulse * 0.1) * (0.6 + 0.4 * Math.sin(time * 3 + e.x));
+        const currentAlpha = (e.alpha + bpmPulse * 0.1) * (0.65 + 0.35 * Math.sin(time * 3 + e.x));
 
-        ctx.fillStyle = `rgba(255, 183, 3, ${Math.max(0, currentAlpha)})`;
+        // Bright Warm Golden Yellow
+        ctx.fillStyle = `rgba(255, 205, 50, ${Math.max(0, currentAlpha)})`;
         ctx.beginPath();
         ctx.arc(e.x, e.y, e.size * (1 + bpmPulse * 0.15), 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // --- PASS 2: Accent Micro Glowing Sparks ---
+      // --- PASS 2: Vivid Light Golden Accent Sparks ---
       ctx.globalCompositeOperation = "lighter";
 
       brightEmbers.forEach((e, idx) => {
@@ -204,23 +208,23 @@ export default function SmokeEffect() {
           return;
         }
 
-        const glowRadius = (e.size * 2.5) * (1 + bpmPulse * 0.2);
-        const currentAlpha = Math.min(1.0, Math.max(0, (e.alpha + bpmPulse * 0.08) * (0.85 + 0.15 * Math.sin(time * 6 + e.x))));
+        const glowRadius = (e.size * 2.8) * (1 + bpmPulse * 0.2);
+        const currentAlpha = Math.min(1.0, Math.max(0, (e.alpha + bpmPulse * 0.1) * (0.85 + 0.15 * Math.sin(time * 6 + e.x))));
         
         const emberGradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
-        emberGradient.addColorStop(0, `rgba(255, 255, 240, ${currentAlpha})`);
-        emberGradient.addColorStop(0.35, `rgba(255, 180, 20, ${currentAlpha * 0.75})`);
-        emberGradient.addColorStop(0.7, `rgba(255, 60, 0, ${currentAlpha * 0.35})`);
-        emberGradient.addColorStop(1, `rgba(200, 20, 0, 0)`);
+        emberGradient.addColorStop(0, `rgba(255, 255, 245, ${currentAlpha})`);
+        emberGradient.addColorStop(0.35, `rgba(255, 215, 60, ${currentAlpha * 0.85})`);
+        emberGradient.addColorStop(0.7, `rgba(255, 120, 20, ${currentAlpha * 0.45})`);
+        emberGradient.addColorStop(1, `rgba(220, 50, 0, 0)`);
 
         ctx.fillStyle = emberGradient;
         ctx.beginPath();
         ctx.arc(e.x, e.y, glowRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.1)})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.2)})`;
         ctx.beginPath();
-        ctx.arc(e.x, e.y, e.size * 0.65, 0, Math.PI * 2);
+        ctx.arc(e.x, e.y, e.size * 0.7, 0, Math.PI * 2);
         ctx.fill();
       });
 
