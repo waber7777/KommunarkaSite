@@ -196,7 +196,7 @@ function ArtworkCard({ art, index, onClick }: { art: Artwork; index: number; onC
             onClick={onClick}
             layoutId={`card-${art.id}`}
         >
-            <div className="relative border border-white/5 overflow-hidden">
+            <div className="relative z-20 border border-white/5 bg-background overflow-hidden">
                 {/* Image without fixed aspect ratio */}
                 <img
                     src={`/assets/artworks/${art.image}.png?v=3`}
