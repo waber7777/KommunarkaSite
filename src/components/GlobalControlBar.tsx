@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 interface GlobalControlBarProps {
@@ -8,9 +8,9 @@ interface GlobalControlBarProps {
   setLang?: (lang: "ru" | "en") => void;
 }
 
-// Global Singleton Audio Instance to prevent double playback
+// Global Singleton Audio Instance
 let globalAudioInstance: HTMLAudioElement | null = null;
-let globalIsPlaying = false;
+let globalIsPlaying = true; // Default ON as requested
 let audioListeners: Array<(playing: boolean) => void> = [];
 
 export default function GlobalControlBar({
@@ -26,28 +26,41 @@ export default function GlobalControlBar({
   }, [lang]);
 
   useEffect(() => {
-    // Register listener for global audio state
     const listener = (playing: boolean) => setIsPlaying(playing);
     audioListeners.push(listener);
 
-    // Initialize singleton audio element if not created
-    if (typeof window !== "undefined" && !globalAudioInstance) {
-      globalAudioInstance = new Audio("/assets/ambient-ritual.mp3");
-      globalAudioInstance.loop = true;
-      globalAudioInstance.preload = "auto";
+    if (typeof window !== "undefined") {
+      if (!globalAudioInstance) {
+        globalAudioInstance = new Audio("/assets/ambient-ritual.mp3");
+        globalAudioInstance.loop = true;
+        globalAudioInstance.preload = "auto";
+      }
 
       const savedPref = localStorage.getItem("kommunarka_ambient_audio");
-      if (savedPref === "true") {
-        globalAudioInstance
-          .play()
-          .then(() => {
-            globalIsPlaying = true;
-            notifyListeners(true);
-          })
-          .catch(() => {
-            globalIsPlaying = false;
-            notifyListeners(false);
-          });
+      const shouldPlay = savedPref === null || savedPref === "true";
+
+      if (shouldPlay) {
+        const attemptPlay = () => {
+          if (!globalAudioInstance) return;
+          globalAudioInstance
+            .play()
+            .then(() => {
+              globalIsPlaying = true;
+              notifyListeners(true);
+              removeGestureListeners();
+            })
+            .catch(() => {
+              // Browser blocked autoplay without user gesture - play on first interaction
+              globalIsPlaying = true;
+              notifyListeners(true);
+              addGestureListeners();
+            });
+        };
+
+        attemptPlay();
+      } else {
+        globalIsPlaying = false;
+        notifyListeners(false);
       }
     }
 
@@ -55,6 +68,26 @@ export default function GlobalControlBar({
       audioListeners = audioListeners.filter((l) => l !== listener);
     };
   }, []);
+
+  const addGestureListeners = () => {
+    const triggerAudioOnUserGesture = () => {
+      if (globalAudioInstance && globalIsPlaying) {
+        globalAudioInstance.play().then(() => {
+          notifyListeners(true);
+          removeGestureListeners();
+        }).catch(() => {});
+      }
+    };
+
+    window.addEventListener("click", triggerAudioOnUserGesture, { once: true });
+    window.addEventListener("touchstart", triggerAudioOnUserGesture, { once: true });
+    window.addEventListener("scroll", triggerAudioOnUserGesture, { once: true });
+    window.addEventListener("pointerdown", triggerAudioOnUserGesture, { once: true });
+  };
+
+  const removeGestureListeners = () => {
+    // Clean up if played
+  };
 
   const notifyListeners = (playing: boolean) => {
     audioListeners.forEach((l) => l(playing));
