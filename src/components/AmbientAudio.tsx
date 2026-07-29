@@ -2,8 +2,23 @@
 
 import { useState, useEffect, useRef } from "react";
 
-// Global Bass Level Exporter for Canvas Sync
-export let getBassLevel = (): number => 0;
+// Global Audio Frequency & Beat Detector
+let audioContext: AudioContext | null = null;
+let analyser: AnalyserNode | null = null;
+let frequencyData: Uint8Array | null = null;
+
+export const getBassLevel = (): number => {
+  if (!analyser || !frequencyData) return 0;
+  // @ts-ignore
+  analyser.getByteFrequencyData(frequencyData);
+  
+  // Read Low Bass Frequency Bins (Sub-bass / Kick drum: 0 to 6)
+  let bassSum = 0;
+  for (let i = 0; i < 6; i++) {
+    bassSum += frequencyData[i];
+  }
+  return bassSum / 6; // Returns average volume 0..255
+};
 
 interface AmbientAudioProps {
   lang?: "ru" | "en";
@@ -12,57 +27,35 @@ interface AmbientAudioProps {
 export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const dataArrayRef = useRef<Uint8Array | null>(null);
 
   useEffect(() => {
-    // Check saved audio preference
+    // Check saved preference
     const savedAudioPref = localStorage.getItem("kommunarka_ambient_audio");
     if (savedAudioPref === "true" && audioRef.current) {
-      audioRef.current
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-          initAudioAnalyser();
-        })
-        .catch(() => setIsPlaying(false));
+      // Audio autoplay requires user gesture
     }
-
-    // Attach global bass meter function
-    getBassLevel = () => {
-      if (!analyserRef.current || !dataArrayRef.current) return 0;
-      // Read low frequencies (bass kick range 0..8)
-      analyserRef.current.getByteFrequencyData(dataArrayRef.current as any);
-      let bassSum = 0;
-      for (let i = 0; i < 8; i++) {
-        bassSum += dataArrayRef.current[i];
-      }
-      return bassSum / 8; // Average Bass Level (0..255)
-    };
   }, []);
 
-  const initAudioAnalyser = () => {
-    if (audioCtxRef.current || !audioRef.current) return;
+  const setupWebAudioAPI = () => {
+    if (!audioRef.current || audioContext) return;
     try {
-      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      const audioCtx = new AudioContextClass();
-      const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64;
-      const source = audioCtx.createMediaElementSource(audioRef.current);
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioContext = new AudioCtx();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.4; // Responsive kick detection
 
+      const source = audioContext.createMediaElementSource(audioRef.current);
       source.connect(analyser);
-      analyser.connect(audioCtx.destination);
+      analyser.connect(audioContext.destination);
 
-      audioCtxRef.current = audioCtx;
-      analyserRef.current = analyser;
-      dataArrayRef.current = new Uint8Array(analyser.frequencyBinCount);
+      frequencyData = new Uint8Array(analyser.frequencyBinCount);
     } catch (e) {
-      console.log("Web Audio API initialization note:", e);
+      console.log("AudioContext setup:", e);
     }
   };
 
-  const toggleAudio = () => {
+  const toggleAudio = async () => {
     if (!audioRef.current) return;
 
     if (isPlaying) {
@@ -70,20 +63,18 @@ export default function AmbientAudio({ lang = "ru" }: AmbientAudioProps) {
       setIsPlaying(false);
       localStorage.setItem("kommunarka_ambient_audio", "false");
     } else {
-      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-        audioCtxRef.current.resume();
+      setupWebAudioAPI();
+      if (audioContext && audioContext.state === "suspended") {
+        await audioContext.resume();
       }
-      initAudioAnalyser();
 
-      audioRef.current
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-          localStorage.setItem("kommunarka_ambient_audio", "true");
-        })
-        .catch((err) => {
-          console.log("Audio play blocked by browser policy:", err);
-        });
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        localStorage.setItem("kommunarka_ambient_audio", "true");
+      } catch (err) {
+        console.log("Audio playback blocked:", err);
+      }
     }
   };
 

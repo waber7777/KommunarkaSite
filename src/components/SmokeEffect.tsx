@@ -23,13 +23,13 @@ export default function SmokeEffect() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // 1. Industrial Smoke Clouds Parameters
+    // 1. Industrial Smoke Clouds
     const smokePuffCount = 30;
     const smokeColors = [
-      "rgba(255, 170, 30, ",  // Warm ember amber mist
-      "rgba(120, 125, 135, ", // Industrial smoke gray
-      "rgba(65, 65, 75, ",    // Deep charcoal ash
-      "rgba(210, 110, 35, "   // Copper rust haze
+      "rgba(255, 170, 30, ",  // Warm amber
+      "rgba(120, 125, 135, ", // Charcoal fog
+      "rgba(65, 65, 75, ",    // Ash mist
+      "rgba(210, 110, 35, "   // Copper rust
     ];
 
     interface SmokePuff {
@@ -63,8 +63,8 @@ export default function SmokeEffect() {
       });
     }
 
-    // 2. Audio-Rhythmic Glowing Fire Embers System
-    const emberCount = 65;
+    // 2. High-Response Audio-Synced Fire Embers System
+    const emberCount = 60;
 
     interface RealisticEmber {
       x: number;
@@ -101,26 +101,30 @@ export default function SmokeEffect() {
       embers.push(createEmber(Math.random() * canvas.height));
     }
 
-    let smoothBass = 0;
+    let smoothedBass = 0;
 
     const render = () => {
-      time += 0.018;
+      time += 0.02;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Read live bass pulse from Web Audio API (or simulated rhythmic beat)
-      const rawBass = getBassLevel();
-      let activeBassKick = 0;
-
-      if (rawBass > 10) {
-        // Live audio kick
-        smoothBass = smoothBass * 0.7 + (rawBass / 255) * 0.3;
-        activeBassKick = Math.max(0, (smoothBass - 0.4) * 2.2);
+      // Read Web Audio API Bass level
+      const liveBass = getBassLevel(); // 0..255
+      
+      // Calculate beat pulse intensity (live audio vs 120BPM beat pulse)
+      if (liveBass > 30) {
+        // Active audio analysis
+        const target = (liveBass / 255);
+        smoothedBass = smoothedBass * 0.6 + target * 0.4;
       } else {
-        // Fallback rhythmic pulse simulation in tune with 120 BPM beat
-        const beatTime = (time * 2.0) % (Math.PI * 2);
-        const beatPulse = Math.pow(Math.max(0, Math.sin(beatTime)), 6);
-        activeBassKick = beatPulse * 0.6;
+        // Fallback 120 BPM rhythmic kick beat simulation (every 0.5 sec)
+        const beatCycle = (time * 6.28) % 3.14; // 120 BPM tempo
+        const kickPulse = Math.pow(Math.sin(beatCycle), 8);
+        smoothedBass = kickPulse * 0.7;
       }
+
+      // Dynamic Beat Scale Factor
+      const beatIntensity = Math.min(1.0, Math.max(0, smoothedBass));
+      const sparkPulseScale = 1.0 + beatIntensity * 1.6; // Up to +160% size pulse on kick
 
       // --- PASS 1: Render Background Smoke Clouds ---
       ctx.globalCompositeOperation = "source-over";
@@ -135,8 +139,8 @@ export default function SmokeEffect() {
           p.x = Math.random() * canvas.width;
         }
 
-        const currentRadius = p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 25 + activeBassKick * 30;
-        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.02 + activeBassKick * 0.03;
+        const currentRadius = (p.baseRadius + Math.sin(time * 1.2 + p.x * 0.005) * 25) * (1 + beatIntensity * 0.15);
+        const currentAlpha = p.alpha + Math.sin(time * 1.1 + p.y * 0.005) * 0.02 + beatIntensity * 0.02;
 
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -159,8 +163,8 @@ export default function SmokeEffect() {
 
       embers.forEach((e, idx) => {
         e.life += 1;
-        // Boost ember speed and pulse intensity when bass kick hits
-        e.y += e.speedY * (1 + activeBassKick * 0.8);
+        // Kick beat speeds up upward movement temporarily
+        e.y += e.speedY * (1 + beatIntensity * 0.6);
         e.x += e.speedX + Math.sin(time * 2.5 + e.y * 0.02) * e.wobbleAmp;
 
         const lifeRatio = e.life / e.maxLife;
@@ -177,15 +181,16 @@ export default function SmokeEffect() {
           return;
         }
 
-        // Bass Kick Boosts Spark Size & Brightness Pulsing in Beat
-        const pulseSizeMultiplier = 1 + activeBassKick * 0.75;
-        const glowRadius = e.size * 4.0 * pulseSizeMultiplier;
-        const emberGradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
-        const currentAlpha = Math.min(1.0, Math.max(0, (e.alpha + activeBassKick * 0.3) * (0.8 + 0.2 * Math.sin(time * 8 + e.x))));
+        // Fire Ember Pulsing Size and Glow Radius
+        const currentSize = e.size * sparkPulseScale;
+        const glowRadius = currentSize * 3.8;
         
+        const currentAlpha = Math.min(1.0, Math.max(0, (e.alpha + beatIntensity * 0.4) * (0.85 + 0.15 * Math.sin(time * 8 + e.x))));
+        
+        const emberGradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, glowRadius);
         emberGradient.addColorStop(0, `rgba(255, 255, 255, ${currentAlpha})`);
-        emberGradient.addColorStop(0.3, `rgba(255, 190, 30, ${currentAlpha * 0.9})`);
-        emberGradient.addColorStop(0.7, `rgba(255, 60, 0, ${currentAlpha * 0.5})`);
+        emberGradient.addColorStop(0.3, `rgba(255, 190, 30, ${currentAlpha * 0.95})`);
+        emberGradient.addColorStop(0.7, `rgba(255, 60, 0, ${currentAlpha * 0.55})`);
         emberGradient.addColorStop(1, `rgba(200, 20, 0, 0)`);
 
         ctx.fillStyle = emberGradient;
@@ -193,10 +198,10 @@ export default function SmokeEffect() {
         ctx.arc(e.x, e.y, glowRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Hot Inner Spark Core
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.1)})`;
+        // Hot Inner Core Spark
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, currentAlpha * 1.2)})`;
         ctx.beginPath();
-        ctx.arc(e.x, e.y, e.size * 0.8 * pulseSizeMultiplier, 0, Math.PI * 2);
+        ctx.arc(e.x, e.y, currentSize * 0.85, 0, Math.PI * 2);
         ctx.fill();
       });
 
