@@ -10,7 +10,7 @@ interface GlobalControlBarProps {
 
 // Global Singleton Audio Instance
 let globalAudioInstance: HTMLAudioElement | null = null;
-let globalIsPlaying = true; // Default ON as requested
+let globalIsPlaying = false;
 let audioListeners: Array<(playing: boolean) => void> = [];
 
 export default function GlobalControlBar({
@@ -29,38 +29,23 @@ export default function GlobalControlBar({
     const listener = (playing: boolean) => setIsPlaying(playing);
     audioListeners.push(listener);
 
-    if (typeof window !== "undefined") {
-      if (!globalAudioInstance) {
-        globalAudioInstance = new Audio("/assets/ambient-ritual.mp3");
-        globalAudioInstance.loop = true;
-        globalAudioInstance.preload = "auto";
-      }
+    if (typeof window !== "undefined" && !globalAudioInstance) {
+      globalAudioInstance = new Audio("/assets/ambient-ritual.mp3");
+      globalAudioInstance.loop = true;
+      globalAudioInstance.preload = "auto";
 
       const savedPref = localStorage.getItem("kommunarka_ambient_audio");
-      const shouldPlay = savedPref === null || savedPref === "true";
-
-      if (shouldPlay) {
-        const attemptPlay = () => {
-          if (!globalAudioInstance) return;
-          globalAudioInstance
-            .play()
-            .then(() => {
-              globalIsPlaying = true;
-              notifyListeners(true);
-              removeGestureListeners();
-            })
-            .catch(() => {
-              // Browser blocked autoplay without user gesture - play on first interaction
-              globalIsPlaying = true;
-              notifyListeners(true);
-              addGestureListeners();
-            });
-        };
-
-        attemptPlay();
-      } else {
-        globalIsPlaying = false;
-        notifyListeners(false);
+      if (savedPref === "true") {
+        globalAudioInstance
+          .play()
+          .then(() => {
+            globalIsPlaying = true;
+            notifyListeners(true);
+          })
+          .catch(() => {
+            globalIsPlaying = false;
+            notifyListeners(false);
+          });
       }
     }
 
@@ -68,26 +53,6 @@ export default function GlobalControlBar({
       audioListeners = audioListeners.filter((l) => l !== listener);
     };
   }, []);
-
-  const addGestureListeners = () => {
-    const triggerAudioOnUserGesture = () => {
-      if (globalAudioInstance && globalIsPlaying) {
-        globalAudioInstance.play().then(() => {
-          notifyListeners(true);
-          removeGestureListeners();
-        }).catch(() => {});
-      }
-    };
-
-    window.addEventListener("click", triggerAudioOnUserGesture, { once: true });
-    window.addEventListener("touchstart", triggerAudioOnUserGesture, { once: true });
-    window.addEventListener("scroll", triggerAudioOnUserGesture, { once: true });
-    window.addEventListener("pointerdown", triggerAudioOnUserGesture, { once: true });
-  };
-
-  const removeGestureListeners = () => {
-    // Clean up if played
-  };
 
   const notifyListeners = (playing: boolean) => {
     audioListeners.forEach((l) => l(playing));
