@@ -432,18 +432,18 @@ export default function AuctionPage() {
               </div>
               <input
                 type="range"
-                min="100000"
-                max="50000000"
-                step="100000"
+                min="10000"
+                max="10000000"
+                step="10000"
                 value={marketCap}
                 onChange={(e) => setMarketCap(Number(e.target.value))}
                 className="w-full h-2 bg-white/10 appearance-none cursor-pointer accent-accent"
               />
               <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
-                <span>$100,000</span>
-                <span>$1,000,000</span>
+                <span>$10,000</span>
+                <span>$500,000</span>
+                <span>$2,500,000</span>
                 <span>$10,000,000</span>
-                <span>$50,000,000</span>
               </div>
               <div className="text-[10px] font-mono text-secondary">
                 {lang === "ru" ? "Расчетная цена 1 токена:" : "Estimated Token Price:"}{" "}
@@ -459,17 +459,18 @@ export default function AuctionPage() {
               </div>
               <input
                 type="range"
-                min="5000"
-                max="250000"
-                step="5000"
+                min="1000"
+                max="100000"
+                step="1000"
                 value={auctionBid}
                 onChange={(e) => setAuctionBid(Number(e.target.value))}
                 className="w-full h-2 bg-white/10 appearance-none cursor-pointer accent-accent"
               />
               <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
-                <span>$5,000</span>
+                <span>$1,000</span>
+                <span>$25,000</span>
                 <span>$50,000</span>
-                <span>$250,000</span>
+                <span>$100,000</span>
               </div>
             </div>
 
@@ -481,7 +482,7 @@ export default function AuctionPage() {
               </div>
               <input
                 type="range"
-                min="2"
+                min="1"
                 max="52"
                 step="1"
                 value={auctionsCount}
@@ -489,7 +490,7 @@ export default function AuctionPage() {
                 className="w-full h-2 bg-white/10 appearance-none cursor-pointer accent-accent"
               />
               <div className="flex justify-between text-[10px] font-mono text-secondary/60 uppercase tracking-widest">
-                <span>2 ({lang === "ru" ? "Раз в полгода" : "Biannual"})</span>
+                <span>1 ({lang === "ru" ? "Ежегодно" : "Annual"})</span>
                 <span>12 ({lang === "ru" ? "Ежемесячно" : "Monthly"})</span>
                 <span>52 ({lang === "ru" ? "Еженедельно" : "Weekly"})</span>
               </div>
