@@ -6,13 +6,29 @@ export default function Counter() {
     const [count, setCount] = useState<number | null>(null);
 
     useEffect(() => {
-        // We use a free zero-setup counter API.
-        // The '/up' endpoint increments and returns the new value.
+        // Safe fetch with fallback
         fetch("https://api.counterapi.dev/v1/waber7777-kommunarka/visits/up")
-            .then(res => res.json())
-            .then(data => setCount(data.count))
-            .catch(err => console.error("Counter error:", err));
+            .then(async (res) => {
+                if (!res.ok) return null;
+                const data = await res.json();
+                if (data && typeof data.count === "number") {
+                    return data.count;
+                }
+                return null;
+            })
+            .then((val) => {
+                if (typeof val === "number") {
+                    setCount(val);
+                }
+            })
+            .catch((err) => {
+                console.warn("Counter service temporarily unavailable:", err);
+            });
     }, []);
+
+    const formattedCount = typeof count === "number" && !isNaN(count)
+        ? `[${count.toString().padStart(6, "0")}]`
+        : "[......]";
 
     return (
         <div className="flex items-center space-x-4 border-t border-white/5 pt-4">
@@ -20,8 +36,9 @@ export default function Counter() {
                 Site Views
             </span>
             <span className="text-[12px] font-mono tracking-[0.2em] text-white">
-                {count === null ? "[......]" : `[${count.toString().padStart(6, '0')}]`}
+                {formattedCount}
             </span>
         </div>
     );
 }
+

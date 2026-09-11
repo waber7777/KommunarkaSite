@@ -1,18 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import GlobalEffects from "@/components/GlobalEffects";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin", "cyrillic"],
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin", "cyrillic"],
-});
 
 export const metadata: Metadata = {
   title: "Art Studio Kommunarka | Moscow",
@@ -27,7 +16,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${inter.variable} ${montserrat.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
       <body className="bg-background text-foreground font-sans selection:bg-accent selection:text-white overflow-x-hidden relative">
         <GlobalEffects />
