@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
-import TypewriterText from "@/components/TypewriterText";
 
 export default function CoinPage() {
   const [auctionBid, setAuctionBid] = useState<number>(25000); // USD value of auction

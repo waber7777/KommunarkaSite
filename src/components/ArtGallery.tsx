@@ -181,7 +181,7 @@ export default function ArtGallery() {
     );
 }
 
-function ArtworkCard({ art, index, onClick }: { art: Artwork; index: number; onClick: () => void }) {
+function ArtworkCard({ art, onClick }: { art: Artwork; index?: number; onClick: () => void }) {
     const containerRef = useRef(null);
 
     return (

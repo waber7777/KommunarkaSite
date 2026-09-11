@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useCurrentLang } from "@/lib/useLang";
 
 interface GlobalControlBarProps {
   lang?: "ru" | "en";
@@ -13,20 +14,16 @@ let globalAudioInstance: HTMLAudioElement | null = null;
 let globalIsPlaying = false;
 let audioListeners: Array<(playing: boolean) => void> = [];
 
+const notifyListeners = (playing: boolean) => {
+  audioListeners.forEach((l) => l(playing));
+};
+
 export default function GlobalControlBar({
-  lang = "ru",
   setLang
 }: GlobalControlBarProps) {
   const pathname = usePathname();
   const [isPlaying, setIsPlaying] = useState<boolean>(globalIsPlaying);
-  const [currentLang, setCurrentLang] = useState<"ru" | "en">(lang);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedLang = (localStorage.getItem("kommunarka_lang") as "ru" | "en") || lang;
-      setCurrentLang(savedLang);
-    }
-  }, [lang]);
+  const [currentLang, setCurrentLangState] = useCurrentLang();
 
   useEffect(() => {
     const listener = (playing: boolean) => setIsPlaying(playing);
@@ -57,10 +54,6 @@ export default function GlobalControlBar({
     };
   }, []);
 
-  const notifyListeners = (playing: boolean) => {
-    audioListeners.forEach((l) => l(playing));
-  };
-
   const toggleAudio = () => {
     if (!globalAudioInstance) {
       globalAudioInstance = new Audio("/assets/ambient-ritual.mp3");
@@ -87,12 +80,7 @@ export default function GlobalControlBar({
   };
 
   const handleLangChange = (newLang: "ru" | "en") => {
-    setCurrentLang(newLang);
-    localStorage.setItem("kommunarka_lang", newLang);
-    
-    // Broadcast language change to page components
-    window.dispatchEvent(new CustomEvent("kommunarka_lang_changed", { detail: newLang }));
-
+    setCurrentLangState(newLang);
     if (setLang) {
       setLang(newLang);
     }
